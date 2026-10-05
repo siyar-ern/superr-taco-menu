@@ -53,10 +53,13 @@
             display: flex; align-items: center; background-color: var(--surface-color); border-radius: 16px;
             padding: 12px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
+        
+        /* Resim Alanı */
         .item-img {
             width: 85px; height: 85px; border-radius: 12px; object-fit: cover; margin-right: 15px;
-            background-color: #e8f5e9; flex-shrink: 0;
+            background-color: #e8f5e9; flex-shrink: 0; border: 1px solid rgba(46, 125, 50, 0.1);
         }
+        
         .item-content { flex-grow: 1; }
         .item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
         .item-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--text-primary); padding-right: 10px; }
@@ -94,21 +97,21 @@
         <section id="taco-menuleri" class="category-section">
             <h2 class="category-title">Taco Menüleri</h2>
             <div class="menu-item">
-                <img src="tavuk-taco.jpg" alt="Tavuklu Taco" class="item-img" onerror="this.style.display='none'">
+                <img src="tavuk-taco.jpg" alt="Tavuklu Taco" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">3'lü Tavuklu Soft Taco</h3><span class="item-price">683.20 TL</span></div>
                     <p class="item-desc">3 Adet Tavuklu Soft Taco (Tavuk, Chipotle sos, Avokado Guacamole sos ve Salsa sos)</p>
                 </div>
             </div>
             <div class="menu-item">
-                <img src="etli-taco.jpg" alt="Etli Taco" class="item-img" onerror="this.style.display='none'">
+                <img src="etli-taco.jpg" alt="Etli Taco" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">3'lü Etli Crispy Taco</h3><span class="item-price">860.80 TL</span></div>
                     <p class="item-desc">3 Adet Etli Crispy Taco (Kaburga Eti, Acılı Macha sos, Sour Cream ve Salsa sos)</p>
                 </div>
             </div>
             <div class="menu-item">
-                <img src="karides-taco.jpg" alt="Karidesli Taco" class="item-img" onerror="this.style.display='none'">
+                <img src="karides-taco.jpg" alt="Karidesli Taco" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">5'li Karidesli Soft Taco</h3><span class="item-price">1398.50 TL</span></div>
                     <p class="item-desc">5 adet Karides, Peri Peri sos, Iceberg Salata, Salsa sos ve Avokado Guacamole sos ile</p>
@@ -120,14 +123,14 @@
         <section id="burritos" class="category-section">
             <h2 class="category-title">Burritos</h2>
             <div class="menu-item">
-                <img src="etli-burrito.jpg" alt="Etli Burrito" class="item-img" onerror="this.style.display='none'">
+                <img src="etli-burrito.jpg" alt="Etli Burrito" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Etli Burrito</h3><span class="item-price">970.40 TL</span></div>
                     <p class="item-desc">30 cm tortilla, Kaburga Et, Meksika Pilavı, Sour Cream, Salsa Sos ve Jalapeno</p>
                 </div>
             </div>
             <div class="menu-item">
-                <img src="tavuk-burrito.jpg" alt="Tavuklu Burrito" class="item-img" onerror="this.style.display='none'">
+                <img src="tavuk-burrito.jpg" alt="Tavuklu Burrito" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Tavuklu Burrito</h3><span class="item-price">717.60 TL</span></div>
                     <p class="item-desc">30 cm tortilla, Tavuk, Meksika Pilavı, Sour Cream, Salsa Sos, Avokado sos ve Cheddar</p>
@@ -139,7 +142,7 @@
         <section id="quesadillas" class="category-section">
             <h2 class="category-title">Quesadillas</h2>
             <div class="menu-item">
-                <img src="quesadilla-tavuk.jpg" alt="Quesadilla" class="item-img" onerror="this.style.display='none'">
+                <img src="quesadilla-tavuk.jpg" alt="Quesadilla" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Quesadilla Tavuklu</h3><span class="item-price">717.60 TL</span></div>
                     <p class="item-desc">Tavuk, Mozarella peyniri, Avokado sos, Iceberg salata, Sour Cream, Salsa Sos, Jalapone Biber</p>
@@ -151,7 +154,7 @@
         <section id="nachos" class="category-section">
             <h2 class="category-title">Nachos</h2>
             <div class="menu-item">
-                <img src="nachos.jpg" alt="Nachos" class="item-img" onerror="this.style.display='none'">
+                <img src="nachos.jpg" alt="Nachos" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Etli Nachos</h3><span class="item-price">510.40 TL</span></div>
                     <p class="item-desc">Nacho Chips, Kaburga Et, Jalapeno Biber, Meksika Fasulyesi, Sour Cream, Salsa ve Cheddar</p>
@@ -163,14 +166,14 @@
         <section id="burgerler" class="category-section">
             <h2 class="category-title">Burgerler</h2>
             <div class="menu-item">
-                <img src="burger-tavuk.jpg" alt="Tavuk Burger" class="item-img" onerror="this.style.display='none'">
+                <img src="burger-tavuk.jpg" alt="Tavuk Burger" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Tavuklu Asado Burger</h3><span class="item-price">480.00 TL</span></div>
                     <p class="item-desc">120g Asado tavuk, Cheddar sos, Barbekü, Salsa, Iceberg, Avokado sos ve Jalapone</p>
                 </div>
             </div>
             <div class="menu-item">
-                <img src="burger-et.jpg" alt="Et Burger" class="item-img" onerror="this.style.display='none'">
+                <img src="burger-et.jpg" alt="Et Burger" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Etli Barbacoa Burger</h3><span class="item-price">650.40 TL</span></div>
                     <p class="item-desc">120g Barbacoa Kaburga Et, Cheddar sos, Barbekü, Salsa, Iceberg, Avokado sos</p>
@@ -182,14 +185,14 @@
         <section id="yan-urunler" class="category-section">
             <h2 class="category-title">Yan Ürünler</h2>
             <div class="menu-item">
-                <img src="patates.jpg" alt="Patates" class="item-img" onerror="this.style.display='none'">
+                <img src="patates.jpg" alt="Patates" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Cheddar Peynirli Patates</h3><span class="item-price">247.60 TL</span></div>
                     <p class="item-desc">Altın sarısı kızartılmış patates çubukları üzerine erimiş Cheddar peyniri</p>
                 </div>
             </div>
             <div class="menu-item">
-                <img src="pilav.jpg" alt="Pilav" class="item-img" onerror="this.style.display='none'">
+                <img src="pilav.jpg" alt="Pilav" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Meksika Usulü Pilav</h3><span class="item-price">202.80 TL</span></div>
                     <p class="item-desc">Meksika fasulyesi, jalapone biber, havuç, bezelye, mısır, özel baharatlı pilav</p>
@@ -201,7 +204,7 @@
         <section id="tatlilar" class="category-section">
             <h2 class="category-title">Tatlılar</h2>
             <div class="menu-item">
-                <img src="churros.jpg" alt="Churros" class="item-img" onerror="this.style.display='none'">
+                <img src="churros.jpg" alt="Churros" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Super Churros</h3><span class="item-price">295.20 TL</span></div>
                     <p class="item-desc">Seçeceğiniz özel çikolata veya karamel sos ile sıcak servis edilir</p>
@@ -213,28 +216,31 @@
         <section id="icecekler" class="category-section">
             <h2 class="category-title">İçecekler</h2>
             <div class="menu-item">
-                <img src="chilada.jpg" alt="Chilada" class="item-img" onerror="this.style.display='none'">
+                <img src="chilada.jpg" alt="Chilada" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Chi Chilada</h3><span class="item-price">177.60 TL</span></div>
                     <p class="item-desc">Acılı Kızılcıklı Limonata (İmza İçecek)</p>
                 </div>
             </div>
+            
+            <!-- KOLA BURADA! -->
             <div class="menu-item">
-                <img src="kola.jpg" alt="Kola" class="item-img" onerror="this.style.display='none'">
+                <img src="kola.jpg" alt="Kola" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Coca-Cola / Zero (33 cl)</h3><span class="item-price">117.60 TL</span></div>
                     <p class="item-desc">Soğuk Kutu İçecek</p>
                 </div>
             </div>
+            
             <div class="menu-item">
-                <img src="ayran.jpg" alt="Ayran" class="item-img" onerror="this.style.display='none'">
+                <img src="ayran.jpg" alt="Ayran" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Ayran (29.5 cl)</h3><span class="item-price">95.00 TL</span></div>
                     <p class="item-desc">Serinletici geleneksel ayran, soğuk servis edilir</p>
                 </div>
             </div>
             <div class="menu-item">
-                <img src="su.jpg" alt="Su" class="item-img" onerror="this.style.display='none'">
+                <img src="su.jpg" alt="Su" class="item-img" onerror="this.src='https://via.placeholder.com/150/e8f5e9/2e7d32?text=Foto'">
                 <div class="item-content">
                     <div class="item-header"><h3 class="item-name">Su (33 cl Cam Şişe)</h3><span class="item-price">60.00 TL</span></div>
                     <p class="item-desc"></p>
