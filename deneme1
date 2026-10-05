@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Süperr Taco - Dijital Menü</title>
+    <style>
+        :root {
+            --primary-color: #ff6b00;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding-bottom: 50px;
+        }
+
+        /* Üst Başlık Alanı */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Kategori Navigasyonu (Yatay Kaydırılabilir) */
+        .category-nav {
+            display: flex;
+            overflow-x: auto;
+            background-color: var(--card-bg);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            scrollbar-width: none; /* Firefox için */
+        }
+        
+        .category-nav::-webkit-scrollbar {
+            display: none; /* Chrome/Safari için */
+        }
+
+        .category-nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            white-space: nowrap;
+            margin-right: 10px;
+            background-color: var(--bg-color);
+            transition: all 0.3s ease;
+        }
+
+        .category-nav a:active, .category-nav a:focus {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Menü Bölümleri */
+        .menu-section {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+        }
+
+        /* Ürün Kartları */
+        .menu-item {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-details {
+            flex: 1;
+            padding-right: 15px;
+        }
+
+        .item-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .item-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .item-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Süperr Taco</h1>
+        <p>Gerçek Meksika Lezzetleri</p>
+    </header>
+
+    <div class="category-nav">
+        <a href="#populer">Popüler</a>
+        <a href="#taco-menuleri">Taco Menüleri</a>
+        <a href="#burritos">Burritos</a>
+        <a href="#burgerler">Burgerler</a>
+        <a href="#icecekler">İçecekler</a>
+    </div>
+
+    <!-- POPÜLER KATEGORİSİ -->
+    <div id="populer" class="menu-section">
+        <h2 class="section-title">Popüler</h2>
+        
+        <div class="menu-item">
+            <div class="item-details">
+                <div class="item-
