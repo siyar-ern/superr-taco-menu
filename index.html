@@ -5,254 +5,313 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Süperr Taco - Dijital Menü</title>
     
+    <!-- Modern Fontlar -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #f1f8f1;
-            --surface-color: #ffffff;
-            --text-primary: #1b3a1b;
-            --text-secondary: #536b53;
-            --accent-color: #2e7d32;
-            --price-color: #d84315;
+            --primary: #d84315; /* İştah açıcı turuncu (Fiyatlar için) */
+            --secondary: #2e7d32; /* Taze ana yeşil (Başlıklar için) */
+            --bg: #f1f8f1; /* Ferah açık yeşil arka plan */
+            --card-bg: #ffffff; /* Beyaz temiz kartlar */
+            --text-dark: #1b3a1b; /* Koyu yeşil metin */
+            --text-muted: #536b53; /* Soluk yeşil açıklamalar */
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
-        body { background-color: var(--bg-color); color: var(--text-primary); font-family: 'Montserrat', sans-serif; line-height: 1.6; padding-bottom: 80px; }
-
-        header {
-            text-align: center; padding: 50px 20px 30px; background: var(--accent-color); color: #ffffff;
-            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-dark); 
+            margin: 0; 
+            padding-bottom: 60px; 
         }
-        .brand-name { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; }
-        .brand-subtitle { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.9; }
 
-        .nav-container {
-            position: sticky; top: 0; background-color: rgba(241, 248, 241, 0.95); backdrop-filter: blur(10px);
-            z-index: 100; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        /* Üst Başlık - Oval Tasarım */
+        header { 
+            background: linear-gradient(135deg, #1b5e20, #4caf50); 
+            color: white; 
+            text-align: center; 
+            padding: 50px 20px 30px; 
+            border-radius: 0 0 35px 35px; 
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2); 
         }
-        .nav-scroll { display: flex; overflow-x: auto; padding: 0 20px; gap: 10px; scrollbar-width: none; }
+        header h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+        header p { margin: 5px 0 0; font-size: 14px; font-weight: 400; opacity: 0.9; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Kategori Kaydırma Menüsü */
+        .nav-wrapper { 
+            position: sticky; 
+            top: 0; 
+            background: rgba(241, 248, 241, 0.95); 
+            backdrop-filter: blur(8px); 
+            z-index: 100; 
+            padding: 15px 0; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03); 
+        }
+        .nav-scroll { 
+            display: flex; 
+            overflow-x: auto; 
+            gap: 10px; 
+            padding: 0 20px; 
+            scrollbar-width: none; 
+        }
         .nav-scroll::-webkit-scrollbar { display: none; }
-        .nav-item {
-            color: var(--text-primary); background-color: var(--surface-color); text-decoration: none; font-size: 13px;
-            font-weight: 600; text-transform: uppercase; white-space: nowrap; padding: 10px 18px; border-radius: 25px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.3s ease;
+        .nav-scroll a { 
+            text-decoration: none; 
+            color: var(--text-dark); 
+            background: var(--card-bg); 
+            padding: 10px 18px; 
+            border-radius: 25px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            white-space: nowrap; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+            transition: 0.3s;
         }
-        .nav-item:active, .nav-item:focus { background-color: var(--accent-color); color: #ffffff; }
-
-        .menu-container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
-        .category-section { padding-top: 30px; padding-bottom: 10px; }
-        .category-title {
-            font-family: 'Playfair Display', serif; font-size: 26px; color: var(--accent-color);
-            margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(46, 125, 50, 0.2);
+        .nav-scroll a:active, .nav-scroll a:focus { 
+            background: var(--secondary); 
+            color: white; 
         }
 
-        .menu-item {
-            display: flex; align-items: center; background-color: var(--surface-color); border-radius: 16px;
-            padding: 12px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        /* Menü Listesi */
+        .container { padding: 20px; max-width: 600px; margin: 0 auto; }
+        
+        .category-title { 
+            font-size: 24px; 
+            color: var(--secondary); 
+            margin: 30px 0 15px; 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        .category-title::before {
+            content: ""; display: block; width: 8px; height: 24px; background: var(--secondary); border-radius: 4px;
         }
         
-        /* Resim Alanı Ayarları - Resim yoksa yeşil arka plan görünür */
-        .item-img {
-            width: 85px; height: 85px; border-radius: 12px; object-fit: cover; margin-right: 15px;
-            background-color: #dcedc8; flex-shrink: 0; border: 1px solid #c5e1a5;
-            color: #2e7d32; font-size: 10px; text-align: center; line-height: 85px;
+        /* Ürün Kartları */
+        .menu-item { 
+            display: flex; 
+            background: var(--card-bg); 
+            border-radius: 16px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04); 
+            align-items: center;
+            gap: 15px;
         }
         
-        .item-content { flex-grow: 1; }
-        .item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
-        .item-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--text-primary); padding-right: 10px; }
-        .item-price { font-size: 15px; color: var(--price-color); font-weight: 700; white-space: nowrap; }
-        .item-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.3; }
-
-        .footer { margin-top: 50px; text-align: center; padding: 30px; }
-        .footer-logo { font-size: 11px; color: var(--text-secondary); letter-spacing: 2px; text-transform: uppercase; }
-        .footer-logo span { color: var(--accent-color); font-weight: 700; }
+        /* Fotoğraf Alanı */
+        .menu-img { 
+            width: 90px; 
+            height: 90px; 
+            border-radius: 12px; 
+            object-fit: cover; 
+            background-color: #e8f5e9; 
+            flex-shrink: 0;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .menu-info { flex: 1; }
+        .menu-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+        .menu-name { font-size: 16px; font-weight: 700; margin: 0; line-height: 1.2; padding-right: 10px; color: var(--text-dark); }
+        .menu-price { font-size: 16px; font-weight: 700; color: var(--primary); margin: 0; white-space: nowrap; }
+        .menu-desc { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.4; }
+        
+        /* TapGo Footer */
+        .footer { text-align: center; padding: 40px 20px; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+        .footer span { font-weight: 700; color: var(--secondary); font-size: 14px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand-name">Süperr Taco</div>
-        <div class="brand-subtitle">Meksika Mutfağı</div>
+        <h1>Süperr Taco</h1>
+        <p>Meksika Mutfağı</p>
     </header>
 
-    <div class="nav-container">
+    <div class="nav-wrapper">
         <div class="nav-scroll">
-            <a href="#taco-menuleri" class="nav-item">Tacolar</a>
-            <a href="#burritos" class="nav-item">Burritos</a>
-            <a href="#quesadillas" class="nav-item">Quesadillas</a>
-            <a href="#nachos" class="nav-item">Nachos</a>
-            <a href="#burgerler" class="nav-item">Burgerler</a>
-            <a href="#yan-urunler" class="nav-item">Yan Ürünler</a>
-            <a href="#tatlilar" class="nav-item">Tatlılar</a>
-            <a href="#icecekler" class="nav-item">İçecekler</a>
+            <a href="#taco-menuleri">Tacolar</a>
+            <a href="#burritos">Burritos</a>
+            <a href="#quesadillas">Quesadillas</a>
+            <a href="#nachos">Nachos</a>
+            <a href="#burgerler">Burgerler</a>
+            <a href="#tatlilar">Tatlılar & Yan Ürünler</a>
+            <a href="#icecekler">İçecekler</a>
         </div>
     </div>
 
-    <main class="menu-container">
+    <div class="container">
 
         <!-- TACOLAR -->
-        <section id="taco-menuleri" class="category-section">
-            <h2 class="category-title">Taco Menüleri</h2>
-            <div class="menu-item">
-                <img src="tavuk-taco.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">3'lü Tavuklu Soft Taco</h3><span class="item-price">683.20 TL</span></div>
-                    <p class="item-desc">3 Adet Tavuklu Soft Taco (Tavuk, Chipotle sos, Avokado Guacamole sos ve Salsa sos)</p>
+        <h2 id="taco-menuleri" class="category-title">Taco Menüleri</h2>
+        
+        <div class="menu-item">
+            <img src="tavuk-taco.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">3'lü Tavuklu Soft Taco</h3>
+                    <p class="menu-price">683.20 TL</p>
                 </div>
+                <p class="menu-desc">3 Adet Tavuklu Soft Taco (Tavuk, Chipotle sos, Avokado Guacamole sos ve Salsa sos)</p>
             </div>
-            <div class="menu-item">
-                <img src="etli-taco.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">3'lü Etli Crispy Taco</h3><span class="item-price">860.80 TL</span></div>
-                    <p class="item-desc">3 Adet Etli Crispy Taco (Kaburga Eti, Acılı Macha sos, Sour Cream ve Salsa sos)</p>
+        </div>
+
+        <div class="menu-item">
+            <img src="etli-taco.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">3'lü Etli Crispy Taco</h3>
+                    <p class="menu-price">860.80 TL</p>
                 </div>
+                <p class="menu-desc">3 Adet Etli Crispy Taco (Kaburga Eti, Acılı Macha sos, Sour Cream ve Salsa sos)</p>
             </div>
-            <div class="menu-item">
-                <img src="karides-taco.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">5'li Karidesli Soft Taco</h3><span class="item-price">1398.50 TL</span></div>
-                    <p class="item-desc">5 adet Karides, Peri Peri sos, Iceberg Salata, Salsa sos ve Avokado Guacamole sos ile</p>
+        </div>
+
+        <div class="menu-item">
+            <img src="karides-taco.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">5'li Karidesli Soft Taco</h3>
+                    <p class="menu-price">1398.50 TL</p>
                 </div>
+                <p class="menu-desc">5 adet Karides, Peri Peri sos, Iceberg Salata, Salsa sos ve Avokado Guacamole sos</p>
             </div>
-        </section>
+        </div>
 
         <!-- BURRITOS -->
-        <section id="burritos" class="category-section">
-            <h2 class="category-title">Burritos</h2>
-            <div class="menu-item">
-                <img src="etli-burrito.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Etli Burrito</h3><span class="item-price">970.40 TL</span></div>
-                    <p class="item-desc">30 cm tortilla, Kaburga Et, Meksika Pilavı, Sour Cream, Salsa Sos ve Jalapeno</p>
+        <h2 id="burritos" class="category-title">Burritos</h2>
+        
+        <div class="menu-item">
+            <img src="etli-burrito.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Etli Burrito</h3>
+                    <p class="menu-price">970.40 TL</p>
                 </div>
+                <p class="menu-desc">30 cm tortilla, Kaburga Et, Meksika Pilavı, Sour Cream, Salsa Sos ve Jalapeno</p>
             </div>
-            <div class="menu-item">
-                <img src="tavuk-burrito.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Tavuklu Burrito</h3><span class="item-price">717.60 TL</span></div>
-                    <p class="item-desc">30 cm tortilla, Tavuk, Meksika Pilavı, Sour Cream, Salsa Sos, Avokado sos ve Cheddar</p>
-                </div>
-            </div>
-        </section>
+        </div>
 
-        <!-- QUESADILLAS -->
-        <section id="quesadillas" class="category-section">
-            <h2 class="category-title">Quesadillas</h2>
-            <div class="menu-item">
-                <img src="quesadilla-tavuk.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Quesadilla Tavuklu</h3><span class="item-price">717.60 TL</span></div>
-                    <p class="item-desc">Tavuk, Mozarella peyniri, Avokado sos, Iceberg salata, Sour Cream, Salsa Sos, Jalapone Biber</p>
+        <div class="menu-item">
+            <img src="tavuk-burrito.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Tavuklu Burrito</h3>
+                    <p class="menu-price">717.60 TL</p>
                 </div>
+                <p class="menu-desc">30 cm tortilla, Tavuk, Meksika Pilavı, Sour Cream, Salsa Sos, Avokado sos ve Cheddar</p>
             </div>
-        </section>
+        </div>
 
-        <!-- NACHOS -->
-        <section id="nachos" class="category-section">
-            <h2 class="category-title">Nachos</h2>
-            <div class="menu-item">
-                <img src="nachos.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Etli Nachos</h3><span class="item-price">510.40 TL</span></div>
-                    <p class="item-desc">Nacho Chips, Kaburga Et, Jalapeno Biber, Meksika Fasulyesi, Sour Cream, Salsa ve Cheddar</p>
+        <!-- QUESADILLAS & NACHOS -->
+        <h2 id="quesadillas" class="category-title">Quesadillas & Nachos</h2>
+        
+        <div class="menu-item">
+            <img src="quesadilla-tavuk.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Quesadilla Tavuklu</h3>
+                    <p class="menu-price">717.60 TL</p>
                 </div>
+                <p class="menu-desc">Tavuk, Mozarella peyniri, Avokado sos, Iceberg salata, Sour Cream, Salsa Sos</p>
             </div>
-        </section>
+        </div>
+
+        <div class="menu-item">
+            <img src="nachos.jpg" id="nachos" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Etli Nachos</h3>
+                    <p class="menu-price">510.40 TL</p>
+                </div>
+                <p class="menu-desc">Nacho Chips, Kaburga Et, Jalapeno Biber, Meksika Fasulyesi, Sour Cream, Cheddar</p>
+            </div>
+        </div>
 
         <!-- BURGERLER -->
-        <section id="burgerler" class="category-section">
-            <h2 class="category-title">Burgerler</h2>
-            <div class="menu-item">
-                <img src="burger-tavuk.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Tavuklu Asado Burger</h3><span class="item-price">480.00 TL</span></div>
-                    <p class="item-desc">120g Asado tavuk, Cheddar sos, Barbekü, Salsa, Iceberg, Avokado sos ve Jalapone</p>
+        <h2 id="burgerler" class="category-title">Burgerler</h2>
+        
+        <div class="menu-item">
+            <img src="burger-tavuk.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Tavuklu Asado Burger</h3>
+                    <p class="menu-price">480.00 TL</p>
                 </div>
+                <p class="menu-desc">120g Asado tavuk, Cheddar sos, Barbekü, Salsa, Iceberg, Avokado sos</p>
             </div>
-            <div class="menu-item">
-                <img src="burger-et.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Etli Barbacoa Burger</h3><span class="item-price">650.40 TL</span></div>
-                    <p class="item-desc">120g Barbacoa Kaburga Et, Cheddar sos, Barbekü, Salsa, Iceberg, Avokado sos</p>
-                </div>
-            </div>
-        </section>
+        </div>
 
-        <!-- YAN ÜRÜNLER -->
-        <section id="yan-urunler" class="category-section">
-            <h2 class="category-title">Yan Ürünler</h2>
-            <div class="menu-item">
-                <img src="patates.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Cheddar Peynirli Patates</h3><span class="item-price">247.60 TL</span></div>
-                    <p class="item-desc">Altın sarısı kızartılmış patates çubukları üzerine erimiş Cheddar peyniri</p>
+        <!-- TATLILAR & YAN ÜRÜNLER -->
+        <h2 id="tatlilar" class="category-title">Tatlılar & Yan Ürünler</h2>
+        
+        <div class="menu-item">
+            <img src="churros.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Super Churros</h3>
+                    <p class="menu-price">295.20 TL</p>
                 </div>
+                <p class="menu-desc">Seçeceğiniz özel çikolata veya karamel sos ile sıcak servis edilir</p>
             </div>
-            <div class="menu-item">
-                <img src="pilav.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Meksika Usulü Pilav</h3><span class="item-price">202.80 TL</span></div>
-                    <p class="item-desc">Meksika fasulyesi, jalapone biber, havuç, bezelye, mısır, özel baharatlı pilav</p>
-                </div>
-            </div>
-        </section>
+        </div>
 
-        <!-- TATLILAR -->
-        <section id="tatlilar" class="category-section">
-            <h2 class="category-title">Tatlılar</h2>
-            <div class="menu-item">
-                <img src="churros.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Super Churros</h3><span class="item-price">295.20 TL</span></div>
-                    <p class="item-desc">Seçeceğiniz özel çikolata veya karamel sos ile sıcak servis edilir</p>
+        <div class="menu-item">
+            <img src="patates.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Cheddar Peynirli Patates</h3>
+                    <p class="menu-price">247.60 TL</p>
                 </div>
+                <p class="menu-desc">Altın sarısı kızartılmış patates çubukları üzerine erimiş Cheddar peyniri</p>
             </div>
-        </section>
+        </div>
 
         <!-- İÇECEKLER -->
-        <section id="icecekler" class="category-section">
-            <h2 class="category-title">İçecekler</h2>
-            <div class="menu-item">
-                <img src="chilada.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Chi Chilada</h3><span class="item-price">177.60 TL</span></div>
-                    <p class="item-desc">Acılı Kızılcıklı Limonata (İmza İçecek)</p>
+        <h2 id="icecekler" class="category-title">İçecekler</h2>
+        
+        <div class="menu-item">
+            <img src="kola.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Coca-Cola (33 cl)</h3>
+                    <p class="menu-price">117.60 TL</p>
                 </div>
+                <p class="menu-desc">Soğuk Kutu İçecek</p>
             </div>
-            <div class="menu-item">
-                <img src="kola.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Coca-Cola / Zero (33 cl)</h3><span class="item-price">117.60 TL</span></div>
-                    <p class="item-desc">Soğuk Kutu İçecek</p>
-                </div>
-            </div>
-            <div class="menu-item">
-                <img src="ayran.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Ayran (29.5 cl)</h3><span class="item-price">95.00 TL</span></div>
-                    <p class="item-desc">Serinletici geleneksel ayran, soğuk servis edilir</p>
-                </div>
-            </div>
-            <div class="menu-item">
-                <img src="su.jpg" alt="Fotoğraf" class="item-img">
-                <div class="item-content">
-                    <div class="item-header"><h3 class="item-name">Su (33 cl Cam Şişe)</h3><span class="item-price">60.00 TL</span></div>
-                    <p class="item-desc"></p>
-                </div>
-            </div>
-        </section>
+        </div>
 
-    </main>
+        <div class="menu-item">
+            <img src="ayran.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Ayran (29.5 cl)</h3>
+                    <p class="menu-price">95.00 TL</p>
+                </div>
+                <p class="menu-desc">Serinletici geleneksel ayran</p>
+            </div>
+        </div>
 
-    <footer class="footer">
-        <div class="footer-logo">Powered by <span>TapGo</span> NFC Menü Sistemleri</div>
-    </footer>
+        <div class="menu-item">
+            <img src="chilada.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
+            <div class="menu-info">
+                <div class="menu-header">
+                    <h3 class="menu-name">Chi Chilada</h3>
+                    <p class="menu-price">177.60 TL</p>
+                </div>
+                <p class="menu-desc">Acılı Kızılcıklı Limonata (İmza İçecek)</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Powered by <span>TapGo</span> NFC Menü Sistemleri
+    </div>
 
 </body>
 </html>
-
-
