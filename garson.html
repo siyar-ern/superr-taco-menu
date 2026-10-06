@@ -6,7 +6,7 @@
     <title>Süperr Taco - Garson Paneli</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK (Bulut Bağlantısı İçin) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -17,14 +17,12 @@
         }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; color: var(--text-dark); -webkit-font-smoothing: antialiased; }
         
-        /* Şifreli Giriş Ekranı Tasarımı */
         #login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: var(--secondary); color: white; }
         .login-box { background: white; padding: 30px; border-radius: 16px; text-align: center; color: var(--text-dark); width: 85%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); box-sizing: border-box; }
         .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
         .login-btn { background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%; box-sizing: border-box; transition: 0.2s; }
         .login-btn:active { transform: scale(0.98); background: #bf360c; }
         
-        /* Kırmızı Hata Mesajı Stili */
         #login-error { color: #d32f2f; margin-top: 15px; font-size: 14px; font-weight: 600; display: none; }
 
         header { background: #1b5e20; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -35,9 +33,9 @@
         .screen.active { display: block; }
 
         .grid-header { display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center; }
-        .table-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; }
-        .table-card { background: var(--white); border-radius: 12px; padding: 20px 10px; text-align: center; cursor: pointer; border-top: 4px solid var(--table-empty); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .table-card h3 { margin: 0 0 5px 0; font-size: 20px; }
+        .table-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 12px; }
+        .table-card { background: var(--white); border-radius: 12px; padding: 15px 5px; text-align: center; cursor: pointer; border-top: 4px solid var(--table-empty); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .table-card h3 { margin: 0 0 5px 0; font-size: 16px; }
         .table-card.dolu { border-top-color: var(--table-full); background-color: #fff5f5; }
         .table-status { font-size: 12px; font-weight: 600; color: var(--table-empty); }
         .table-card.dolu .table-status { color: var(--table-full); }
@@ -57,13 +55,13 @@
 
         .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); }
         .action-btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; }
+        .action-btn:disabled { background: #999; cursor: not-allowed; }
         .action-btn.pay-btn { background: var(--secondary); }
     </style>
 </head>
 <body>
 
-    <!-- GİRİŞ EKRANI -->
-    <div id="login-screen" class="screen active">
+    <div id="login-screen">
         <div class="login-box">
             <h2>TapGo Garson</h2>
             <input type="text" id="kullanici" placeholder="Kullanıcı Adı">
@@ -73,7 +71,6 @@
         </div>
     </div>
 
-    <!-- ANA SİSTEM -->
     <div id="main-system" style="display: none;">
         <header>
             <h1>TapGo POS</h1>
@@ -81,40 +78,33 @@
         </header>
 
         <div class="container">
-            <!-- MASA EKRANI -->
             <div id="masalar-screen" class="screen active">
                 <div class="grid-header">
                     <h2>Masalar</h2>
                     <div><span id="dolu-sayisi">0</span> Masa Dolu</div>
                 </div>
                 <div class="table-grid" id="table-container">
-                    <!-- Firebase'den Canlı Yüklenecek -->
+                    <!-- Masalar Buraya Çizilecek -->
                 </div>
             </div>
 
-            <!-- SİPARİŞ EKRANI -->
             <div id="siparis-screen" class="screen">
                 <button class="back-btn" onclick="ekranDegistir('masalar-screen')">← Geri Dön</button>
                 <h2 id="secili-masa-baslik">Masa 1</h2>
                 
-                <!-- Önceki Siparişler -->
                 <div id="eski-siparisler" style="background:#fff3e0; padding:15px; border-radius:12px; margin-bottom:15px; display:none;">
                     <h4 style="margin:0 0 10px; color:#e65100;">Mevcut Adisyon</h4>
                     <div id="eski-siparis-listesi"></div>
                 </div>
 
-                <!-- Yeni Eklenenler (Sepet) -->
                 <div class="cart-box" id="yeni-sepet">
                     <h4 style="margin:0 0 10px; color:var(--secondary);">Yeni Eklenenler (Onay Bekliyor)</h4>
                     <div id="yeni-sepet-listesi"></div>
                 </div>
 
-                <!-- Dinamik Menü -->
                 <div id="menu-alani"></div>
-                
                 <br><br><br><br>
 
-                <!-- Alt Çubuk -->
                 <div class="bottom-bar">
                     <div style="font-size:16px; font-weight:600;">Genel Toplam: <br><span style="color:var(--primary); font-size:18px;" id="sepet-toplam">0 TL</span></div>
                     <button class="action-btn" id="mutfak-btn" onclick="mutfagaGonder()">Mutfağa Gönder</button>
@@ -125,9 +115,7 @@
     </div>
 
     <script>
-        // ==========================================
-        // FIREBASE BAĞLANTISI 
-        // ==========================================
+        // FIREBASE BAĞLANTISI
         const firebaseConfig = {
             apiKey: "AIzaSyA6NWemh-bc9-pbvLC5kHQAYBjPvZdBQeM",
             authDomain: "superrtaco-e790c.firebaseapp.com",
@@ -140,36 +128,30 @@
         };
         
         let db = null;
+        let aktifMasaId = null;
+        let anlikSepet = [];
+        let masalarVerisi = {};
+
+        for(let i=1; i<=25; i++) {
+            masalarVerisi["masa_" + i] = { id: i, durum: 'bos', siparisler: [], toplamHesap: 0 };
+        }
         
-        // ÇÖKMEZ (GÜVENLİ) BAŞLATMA
         window.onload = function() {
             try {
                 if (typeof firebase !== 'undefined') {
-                    if (!firebase.apps.length) {
-                        firebase.initializeApp(firebaseConfig);
-                    }
+                    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
                     db = firebase.database();
-                } else {
-                    console.error("Uyarı: Firebase yüklenemedi. İnternet bağlantınızı veya reklam engelleyicinizi kontrol edin.");
                 }
-            } catch (error) {
-                console.error("Firebase Hatası:", error);
-            }
+            } catch (error) { console.error("Firebase Hatası:", error); }
 
-            // Enter tuşu dinleyicisini güvenli şekilde yükle
             const sifreInput = document.getElementById('sifre');
             if(sifreInput) {
                 sifreInput.addEventListener('keypress', function (e) {
-                    if (e.key === 'Enter') {
-                        girisYap();
-                    }
+                    if (e.key === 'Enter') girisYap();
                 });
             }
         };
 
-        // ==========================================
-        // MENÜ ÜRÜNLERİ
-        // ==========================================
         const menuUrunleri = [
             { kategori: "BAŞLANGIÇ", urunler: [
                 { ad: "Chips Nachos", fiyat: 625.00 },
@@ -199,21 +181,17 @@
             menuUrunleri.forEach(kategori => {
                 html += `<div class="menu-category">${kategori.kategori}</div>`;
                 kategori.urunler.forEach(urun => {
+                    const guvenliAd = urun.ad.replace(/'/g, "\\'"); 
                     html += `
                     <div class="menu-item">
                         <div class="item-info"><h4>${urun.ad}</h4><p>${urun.fiyat} TL</p></div>
-                        <button class="add-btn" onclick="sepeteEkle('${urun.ad}', ${urun.fiyat})">+</button>
+                        <button class="add-btn" onclick="sepeteEkle('${guvenliAd}', ${urun.fiyat})">+</button>
                     </div>`;
                 });
             });
             menuAlani.innerHTML = html;
         }
 
-        let aktifMasaId = null;
-        let anlikSepet = [];
-        let masalarVerisi = {};
-
-        // GİRİŞ İŞLEMİ (Boşlukları siler, Büyük-Küçük harf katı kuralı geçerlidir)
         function girisYap() {
             const kadi = document.getElementById('kullanici').value.trim(); 
             const sifre = document.getElementById('sifre').value.trim();
@@ -221,47 +199,49 @@
 
             if(kadi === 'siyar' && sifre === 'siyar123') {
                 hataMesaji.style.display = 'none';
-                document.getElementById('login-screen').classList.remove('active');
-                document.getElementById('main-system').style.display = 'block';
+                document.getElementById('login-screen').style.display = 'none'; 
+                document.getElementById('main-system').style.display = 'block'; 
+                
                 menuyuCiz();
+                ekranaMasalariCiz(masalarVerisi);
                 veritabaniniDinle();
             } else {
-                hataMesaji.style.display = 'block'; // Kırmızı uyarıyı göster
+                hataMesaji.style.display = 'block';
             }
         }
 
         function cikisYap() {
             document.getElementById('main-system').style.display = 'none';
-            document.getElementById('login-screen').classList.add('active');
+            document.getElementById('login-screen').style.display = 'flex'; 
             document.getElementById('kullanici').value = '';
             document.getElementById('sifre').value = '';
-            document.getElementById('login-error').style.display = 'none';
         }
 
-        // ==========================================
-        // FIREBASE DİNLEME
-        // ==========================================
         function veritabaniniDinle() {
-            if(!db) {
-                alert("Veritabanı bağlantısı kurulamadı. İnternet bağlantınızı veya reklam engelleyicinizi (AdBlock) kontrol edin.");
-                return;
-            }
+            if(!db) return; 
+
             db.ref('masalar').on('value', (snapshot) => {
-                const data = snapshot.val();
+                let data = snapshot.val();
+                let guncellemeGerekiyor = false;
                 
                 if (!data) {
-                    let baslangicMasalari = {};
-                    for(let i=1; i<=12; i++) {
-                        baslangicMasalari["masa_" + i] = { id: i, durum: 'bos', siparisler: [], toplamHesap: 0 };
+                    data = masalarVerisi; 
+                    guncellemeGerekiyor = true;
+                } else {
+                    for(let i=1; i<=25; i++) {
+                        if(!data["masa_" + i]) {
+                            data["masa_" + i] = { id: i, durum: 'bos', siparisler: [], toplamHesap: 0 };
+                            guncellemeGerekiyor = true;
+                        }
                     }
-                    db.ref('masalar').set(baslangicMasalari);
-                    return;
                 }
 
                 masalarVerisi = data;
                 ekranaMasalariCiz(data);
-            }, (error) => {
-                alert("Veritabanı Kuralları (Rules) açık değil! Lütfen Firebase üzerinden izinleri düzeltin.");
+
+                if(guncellemeGerekiyor) {
+                    db.ref('masalar').update(data);
+                }
             });
         }
 
@@ -270,39 +250,46 @@
             container.innerHTML = '';
             let doluSayisi = 0;
 
-            for (const key in data) {
-                const masa = data[key];
+            const siraliMasalar = Object.values(data).sort((a, b) => a.id - b.id);
+
+            siraliMasalar.forEach(masa => {
                 if(masa.durum === 'dolu') doluSayisi++;
                 
                 const card = document.createElement('div');
                 card.className = `table-card ${masa.durum}`;
-                card.onclick = () => masaSec(masa.id, key);
+                card.onclick = () => masaSec(masa.id, "masa_" + masa.id);
                 
                 card.innerHTML = `
                     <h3>Masa ${masa.id}</h3>
                     <div class="table-status">${masa.durum === 'bos' ? 'Boş' : masa.toplamHesap + ' TL'}</div>
                 `;
                 container.appendChild(card);
-            }
+            });
             document.getElementById('dolu-sayisi').innerText = doluSayisi;
         }
 
-        // ==========================================
-        // SİPARİŞ İŞLEMLERİ
-        // ==========================================
         function masaSec(id, firebaseKey) {
             aktifMasaId = firebaseKey;
             anlikSepet = []; 
-            const masa = masalarVerisi[firebaseKey];
+            
+            // Eğer masa verisi herhangi bir sebepten kayıpsa boş bir şablon oluştur (Çökmeyi engeller)
+            const masa = masalarVerisi[firebaseKey] || { durum: 'bos', siparisler: [], toplamHesap: 0 };
             
             document.getElementById('secili-masa-baslik').innerText = `Masa ${id}`;
             document.getElementById('hesap-btn').style.display = (masa.durum === 'dolu') ? 'block' : 'none';
             
             const eskiSiparisDiv = document.getElementById('eski-siparisler');
-            if(masa.durum === 'dolu' && masa.siparisler) {
+            
+            // Firebase siparişleri array(dizi) yerine object(nesne) döndürürse diye güvenlik kontrolü:
+            let mevcutSiparisler = [];
+            if(masa.siparisler) {
+                mevcutSiparisler = Array.isArray(masa.siparisler) ? masa.siparisler : Object.values(masa.siparisler);
+            }
+
+            if(masa.durum === 'dolu' && mevcutSiparisler.length > 0) {
                 eskiSiparisDiv.style.display = 'block';
                 let html = '';
-                masa.siparisler.forEach(item => {
+                mevcutSiparisler.forEach(item => {
                     html += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${item.adet}x ${item.ad}</span> <b>${item.fiyat * item.adet} TL</b></div>`;
                 });
                 document.getElementById('eski-siparis-listesi').innerHTML = html;
@@ -349,7 +336,7 @@
                         <div class="qty-controls">
                             <button class="qty-btn" onclick="sepettenCikar(${i})">-</button>
                             <span>${urun.adet}</span>
-                            <button class="qty-btn" onclick="sepeteEkle('${urun.ad}', ${urun.fiyat})">+</button>
+                            <button class="qty-btn" onclick="sepeteEkle('${urun.ad.replace(/'/g, "\\'")}', ${urun.fiyat})">+</button>
                             <span style="font-weight:bold; margin-left:10px;">${urun.fiyat * urun.adet} TL</span>
                         </div>
                     </div>`;
@@ -359,45 +346,75 @@
                 sepetDiv.style.display = 'none';
             }
 
-            const masa = masalarVerisi[aktifMasaId];
-            const eskiToplam = masa && masa.toplamHesap ? masa.toplamHesap : 0;
+            const masa = masalarVerisi[aktifMasaId] || {};
+            const eskiToplam = masa.toplamHesap || 0;
             document.getElementById('sepet-toplam').innerText = (eskiToplam + yeniToplam) + ' TL';
         }
 
         // ==========================================
-        // BULUTA (FIREBASE) VERİ YAZMA
+        // KUSURSUZ (BULLETPROOF) MUTFAĞA GÖNDERME
         // ==========================================
         function mutfagaGonder() {
-            if(anlikSepet.length === 0) return alert("Sepet boş!");
+            if(anlikSepet.length === 0) {
+                alert("Lütfen önce sepete ürün ekleyin!");
+                return;
+            }
             
-            const masa = masalarVerisi[aktifMasaId];
-            let guncelSiparisler = masa.siparisler ? [...masa.siparisler] : [];
+            const btn = document.getElementById('mutfak-btn');
+            const eskiYazi = btn.innerText;
+            btn.innerText = "Gönderiliyor...";
+            btn.disabled = true;
+
+            const masa = masalarVerisi[aktifMasaId] || { durum: 'bos', siparisler: [], toplamHesap: 0 };
+            
+            // Firebase'den gelen veriyi her ihtimale karşı temiz bir diziye çeviriyoruz
+            let guncelSiparisler = [];
+            if(masa.siparisler) {
+                guncelSiparisler = Array.isArray(masa.siparisler) ? [...masa.siparisler] : Object.values(masa.siparisler);
+            }
+            
+            // Yeni siparişleri üzerine ekle
             anlikSepet.forEach(yeniUrun => { guncelSiparisler.push(yeniUrun); });
 
             const eskiToplam = masa.toplamHesap || 0;
             const yeniEklenenTutar = anlikSepet.reduce((t, u) => t + (u.fiyat * u.adet), 0);
 
-            db.ref('masalar/' + aktifMasaId).update({
-                durum: 'dolu',
-                siparisler: guncelSiparisler,
-                toplamHesap: eskiToplam + yeniEklenenTutar
-            }).then(() => {
-                alert("Siparişler mutfağa iletildi!");
-                ekranDegistir('masalar-screen');
-            }).catch((error) => {
-                alert("Hata oluştu! Lütfen veritabanı bağlantınızı kontrol edin.");
-            });
+            if(db) {
+                db.ref('masalar/' + aktifMasaId).update({
+                    durum: 'dolu',
+                    siparisler: guncelSiparisler,
+                    toplamHesap: eskiToplam + yeniEklenenTutar
+                }).then(() => {
+                    alert("Siparişler başarıyla mutfağa iletildi!");
+                    btn.innerText = eskiYazi;
+                    btn.disabled = false;
+                    ekranDegistir('masalar-screen');
+                }).catch((error) => {
+                    console.error("Firebase Hatası:", error);
+                    alert("Veritabanı hatası! Lütfen Firebase (Rules) izinlerinizi kontrol edin.");
+                    btn.innerText = eskiYazi;
+                    btn.disabled = false;
+                });
+            } else {
+                alert("İnternet bağlantısı koptu! Sayfayı yenileyin.");
+                btn.innerText = eskiYazi;
+                btn.disabled = false;
+            }
         }
 
         function hesabiAl() {
-            if(confirm("Hesap alındı onaylıyor musunuz?")) {
-                db.ref('masalar/' + aktifMasaId).update({
-                    durum: 'bos',
-                    siparisler: [],
-                    toplamHesap: 0
-                }).then(() => {
-                    ekranDegistir('masalar-screen');
-                });
+            if(confirm("Masa hesabını alıp kapatmayı onaylıyor musunuz?")) {
+                if(db) {
+                    db.ref('masalar/' + aktifMasaId).update({
+                        durum: 'bos',
+                        siparisler: null, // Firebase'de diziyi temizlemek için null gönderilir
+                        toplamHesap: 0
+                    }).then(() => {
+                        ekranDegistir('masalar-screen');
+                    }).catch((error) => {
+                        alert("Hata oluştu, masa kapatılamadı.");
+                    });
+                }
             }
         }
 
