@@ -2,316 +2,588 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Süperr Taco - Dijital Menü</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Superr Taco - Menü</title>
     
-    <!-- Modern Fontlar -->
+    <!-- Fotoğraflardaki tasarıma birebir uyan 'Nunito' yazı tipi -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #d84315; /* İştah açıcı turuncu (Fiyatlar için) */
-            --secondary: #2e7d32; /* Taze ana yeşil (Başlıklar için) */
-            --bg: #f1f8f1; /* Ferah açık yeşil arka plan */
-            --card-bg: #ffffff; /* Beyaz temiz kartlar */
-            --text-dark: #1b3a1b; /* Koyu yeşil metin */
-            --text-muted: #536b53; /* Soluk yeşil açıklamalar */
+            /* Renk Paleti (Fotoğraflardan Birebir) */
+            --bg-color: #f0fdf4; /* İstenen açık yeşil arka plan */
+            --card-bg: #ffffff; /* Kart arka planı (Beyaz) */
+            --title-red: #c90022; /* Kırmızı başlıklar */
+            --desc-red: #d84b5b; /* Açıklamaların açık pembemsi kırmızısı */
+            --price-green: #1f8a2c; /* Yeşil fiyatlar */
+            --nav-green: #298d36; /* Menü butonları yeşili */
+            --border-color: #eaebec;
         }
 
         body { 
-            font-family: 'Poppins', sans-serif; 
-            background-color: var(--bg); 
-            color: var(--text-dark); 
+            font-family: 'Nunito', sans-serif; 
+            background-color: var(--bg-color); 
             margin: 0; 
-            padding-bottom: 60px; 
-        }
-
-        /* Üst Başlık - Oval Tasarım */
-        header { 
-            background: linear-gradient(135deg, #1b5e20, #4caf50); 
-            color: white; 
-            text-align: center; 
-            padding: 50px 20px 30px; 
-            border-radius: 0 0 35px 35px; 
-            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2); 
-        }
-        header h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 1px; }
-        header p { margin: 5px 0 0; font-size: 14px; font-weight: 400; opacity: 0.9; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* Kategori Kaydırma Menüsü */
-        .nav-wrapper { 
-            position: sticky; 
-            top: 0; 
-            background: rgba(241, 248, 241, 0.95); 
-            backdrop-filter: blur(8px); 
-            z-index: 100; 
-            padding: 15px 0; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03); 
-        }
-        .nav-scroll { 
-            display: flex; 
-            overflow-x: auto; 
-            gap: 10px; 
-            padding: 0 20px; 
-            scrollbar-width: none; 
-        }
-        .nav-scroll::-webkit-scrollbar { display: none; }
-        .nav-scroll a { 
-            text-decoration: none; 
-            color: var(--text-dark); 
-            background: var(--card-bg); 
-            padding: 10px 18px; 
-            border-radius: 25px; 
-            font-size: 13px; 
-            font-weight: 600; 
-            white-space: nowrap; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-            transition: 0.3s;
-        }
-        .nav-scroll a:active, .nav-scroll a:focus { 
-            background: var(--secondary); 
-            color: white; 
-        }
-
-        /* Menü Listesi */
-        .container { padding: 20px; max-width: 600px; margin: 0 auto; }
-        
-        .category-title { 
-            font-size: 24px; 
-            color: var(--secondary); 
-            margin: 30px 0 15px; 
-            font-weight: 700; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-        }
-        .category-title::before {
-            content: ""; display: block; width: 8px; height: 24px; background: var(--secondary); border-radius: 4px;
+            padding: 0; 
+            color: #333; 
+            -webkit-font-smoothing: antialiased;
         }
         
-        /* Ürün Kartları */
-        .menu-item { 
-            display: flex; 
-            background: var(--card-bg); 
-            border-radius: 16px; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.04); 
+        /* Üst Menü / Başlık Alanı */
+        .top-header {
+            background-color: var(--card-bg);
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .brand-title {
+            color: var(--title-red);
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            letter-spacing: -0.5px;
+        }
+        
+        .info-link {
+            color: var(--nav-green);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 6px;
+        }
+
+        /* Fotoğraftaki Banner (Coca-Cola) */
+        .banner-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background-color: var(--card-bg);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .banner-container img {
+            max-width: 600px;
+            width: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        /* Kategori Butonları (Sticky Nav) */
+        .category-nav {
+            position: sticky;
+            top: 0;
+            background: var(--card-bg);
+            padding: 15px 40px;
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+            scrollbar-width: none;
+        }
+        .category-nav::-webkit-scrollbar { display: none; }
+        
+        .cat-btn {
+            padding: 8px 16px;
+            background: transparent;
+            color: var(--nav-green);
+            border: 1px solid var(--nav-green);
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+        .cat-btn:active, .cat-btn:focus {
+            background: var(--nav-green);
+            color: white;
+        }
+
+        /* Ana İçerik ve Grid Yapısı */
+        .main-container {
+            padding: 30px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            color: var(--title-red);
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
         }
         
-        /* Fotoğraf Alanı */
-        .menu-img { 
-            width: 90px; 
-            height: 90px; 
-            border-radius: 12px; 
-            object-fit: cover; 
-            background-color: #e8f5e9; 
-            flex-shrink: 0;
-            border: 1px solid #c8e6c9;
+        .section-desc {
+            color: var(--desc-red);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            font-weight: 600;
         }
-        
-        .menu-info { flex: 1; }
-        .menu-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
-        .menu-name { font-size: 16px; font-weight: 700; margin: 0; line-height: 1.2; padding-right: 10px; color: var(--text-dark); }
-        .menu-price { font-size: 16px; font-weight: 700; color: var(--primary); margin: 0; white-space: nowrap; }
-        .menu-desc { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.4; }
-        
-        /* TapGo Footer */
-        .footer { text-align: center; padding: 40px 20px; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
-        .footer span { font-weight: 700; color: var(--secondary); font-size: 14px; }
+
+        /* Kartların Grid Dizilimi (Bilgisayarda 3'lü, Telefonda 1'li) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        /* Ürün Kartı Tasarımı */
+        .menu-card {
+            background: var(--card-bg);
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            position: relative;
+        }
+
+        .item-name {
+            color: var(--title-red);
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            line-height: 1.3;
+        }
+
+        .item-desc {
+            color: var(--desc-red);
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            line-height: 1.4;
+            flex-grow: 1; /* Kart boylarını eşitler */
+        }
+
+        .item-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .item-price {
+            color: var(--price-green);
+            font-size: 15px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        /* Sağ Alt Köşe Kalp İkonu */
+        .heart-icon {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: var(--desc-red);
+            stroke-width: 2;
+            cursor: pointer;
+        }
+
+        /* Mobil Uyum (NFC ve Telefonlar için) */
+        @media (max-width: 768px) {
+            .top-header, .category-nav, .main-container { padding-left: 15px; padding-right: 15px; }
+            .grid-container { grid-template-columns: 1fr; }
+            .banner-container img { border-radius: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Süperr Taco</h1>
-        <p>Meksika Mutfağı</p>
-    </header>
-
-    <div class="nav-wrapper">
-        <div class="nav-scroll">
-            <a href="#taco-menuleri">Tacolar</a>
-            <a href="#burritos">Burritos</a>
-            <a href="#quesadillas">Quesadillas</a>
-            <a href="#nachos">Nachos</a>
-            <a href="#burgerler">Burgerler</a>
-            <a href="#tatlilar">Tatlılar & Yan Ürünler</a>
-            <a href="#icecekler">İçecekler</a>
-        </div>
+    <!-- Üst Başlık -->
+    <div class="top-header">
+        <h1 class="brand-title">Superr Taco</h1>
+        <a href="#" class="info-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Daha Fazla Bilgi
+        </a>
     </div>
 
-    <div class="container">
+    <!-- Menü Butonları (Sticky) -->
+    <div class="category-nav">
+        <a href="#baslangic" class="cat-btn">BAŞLANGIÇ</a>
+        <a href="#taco" class="cat-btn">TACO</a>
+        <a href="#tacogrande" class="cat-btn">TACO GRANDE</a>
+        <a href="#quesadilla" class="cat-btn">QUESADILLA</a>
+        <a href="#yaninda" class="cat-btn">YANINDA İYİ GİDER</a>
+        <a href="#fajita" class="cat-btn">FAJITA</a>
+        <a href="#texas" class="cat-btn">TEXAS ENCHILADA</a>
+        <a href="#extreme" class="cat-btn">EXTREME CHEESE TACO</a>
+        <a href="#supreme" class="cat-btn">TACO SUPREME</a>
+        <a href="#specials" class="cat-btn">SPECIALS</a>
+    </div>
 
-        <!-- TACOLAR -->
-        <h2 id="taco-menuleri" class="category-title">Taco Menüleri</h2>
-        
-        <div class="menu-item">
-            <img src="tavuk-taco.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">3'lü Tavuklu Soft Taco</h3>
-                    <p class="menu-price">683.20 TL</p>
+    <div class="main-container">
+
+        <!-- BAŞLANGIÇ -->
+        <div id="baslangic" class="category-section">
+            <h2 class="section-title">BAŞLANGIÇ</h2>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">Chips Nachos</h3>
+                    <p class="item-desc">Enfes nachos kabukları ve Creamy Cheese sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺2,625.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">3 Adet Tavuklu Soft Taco (Tavuk, Chipotle sos, Avokado Guacamole sos ve Salsa sos)</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Quicksadilla Macha (Acılı)</h3>
+                    <p class="item-desc">Soft tortilla ekmeklerinde, Mozzarella peyniri, Carne (kıyma) üzerinde Avokado (Guacamole) Salsa sos ve Macha sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺485.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Quicksadilla ( Creamy Cheese Sos )</h3>
+                    <p class="item-desc">Soft tortilla ekmeklerinde, Mozzarella peyniri, Carne (kıyma) üzerinde Avokado (Guacamole) Salsa sos ve Creamy Cheese sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺485.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Nachos Soslu</h3>
+                    <p class="item-desc">Nachos kabukları, Mexican fasulye, Jalapeno biber, Avokado (guacamole) sos, Mısır, Kişniş, Sour cream, Chipotle sos, Salsa sos, Cheddar peynir...</p>
+                    <div class="item-bottom"><p class="item-price">₺380.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Nachos Carne (Kıymalı)</h3>
+                    <p class="item-desc">Chemoule sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺495.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
             </div>
         </div>
 
-        <div class="menu-item">
-            <img src="etli-taco.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">3'lü Etli Crispy Taco</h3>
-                    <p class="menu-price">860.80 TL</p>
+        <!-- TACO -->
+        <div id="taco" class="category-section">
+            <h2 class="section-title">TACO</h2>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">3'lü Soft veya Crispy Taco - Tavuklu</h3>
+                    <p class="item-desc">Tavuk, Chipotle sos, Avokado (Guacamole) sos ve Salsa sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺682.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">3 Adet Etli Crispy Taco (Kaburga Eti, Acılı Macha sos, Sour Cream ve Salsa sos)</p>
+                <div class="menu-card">
+                    <h3 class="item-name">5'li Soft veya Crispy Taco - Tavuklu</h3>
+                    <p class="item-desc">Tavuk, Chipotle sos, Avokado (Guacamole) sos ve Salsa sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺982.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">3'lü Soft veya Crispy Taco - Nohutlu</h3>
+                    <p class="item-desc">Nohut, Peri Peri sos, Sour Cream, Iceberg salata ve Salsa sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺682.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">5'li Soft veya Crispy Taco - Nohutlu</h3>
+                    <p class="item-desc">Nohut, Peri Peri sos, Sour Cream, Iceberg salata ve Salsa sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺982.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">3'lü Soft veya Crispy Taco - Kıymalı</h3>
+                    <p class="item-desc">Kıyma, Chipotle sos, Sour Cream ve Avokado (Guacamole) sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺770.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">5'li Soft veya Crispy Taco - Kıymalı</h3>
+                    <p class="item-desc">Kıyma, Chipotle sos, Sour Cream ve Avokado (Guacamole) sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺1,173.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">3'lü Soft veya Crispy Taco - Etli</h3>
+                    <p class="item-desc">Kaburga Eti, Macha sos (Acılı), Sour Cream ve Salsa sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺860.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">5'li Soft veya Crispy Taco - Etli</h3>
+                    <p class="item-desc">Kaburga Eti, Macha sos (Acılı), Sour Cream ve Salsa sos ile...</p>
+                    <div class="item-bottom"><p class="item-price">₺1,315.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">3'lü Soft veya Crispy Taco - Karidesli</h3>
+                    <p class="item-desc">Karides, Peri Peri sos, Iceberg Salata, Salsa sos ve Avokado (Guacamole) sos ile</p>
+                    <div class="item-bottom"><p class="item-price">₺860.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">5'li Soft veya Crispy Taco - Karidesli</h3>
+                    <p class="item-desc">Karides, Peri Peri sos, Iceberg Salata, Salsa sos ve Avokado (Guacamole) sos ile</p>
+                    <div class="item-bottom"><p class="item-price">₺1,315.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
             </div>
         </div>
 
-        <div class="menu-item">
-            <img src="karides-taco.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">5'li Karidesli Soft Taco</h3>
-                    <p class="menu-price">1398.50 TL</p>
+        <!-- TACO GRANDE -->
+        <div id="tacogrande" class="category-section">
+            <h2 class="section-title">TACO GRANDE</h2>
+            <p class="section-desc">30 cm tortilla ekmeği, 15 cm Crispy tortilla ve 15 cm Soft tortilla ekmeği arasında seçeceğiniz; Barbacoa stilinde kaburga eti veya Asado stilinde tavuk veya nohut veya kıyma veya karides eşliğinde, Peri Peri Sos, Cheddar, Salsa Sos, Avokado (Guacamole) sos ve Cheddar Sos ile...</p>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">Tavuklu</h3>
+                    <p class="item-desc">(Asado)</p>
+                    <div class="item-bottom"><p class="item-price">₺717.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">5 adet Karides, Peri Peri sos, Iceberg Salata, Salsa sos ve Avokado Guacamole sos</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Nohutlu</h3>
+                    <p class="item-desc">(Garbanzos)</p>
+                    <div class="item-bottom"><p class="item-price">₺717.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Kıymalı</h3>
+                    <p class="item-desc">(Carne)</p>
+                    <div class="item-bottom"><p class="item-price">₺850.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Etli</h3>
+                    <p class="item-desc">(Barbacoa)</p>
+                    <div class="item-bottom"><p class="item-price">₺970.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Karidesli</h3>
+                    <p class="item-desc">(Shrimp)</p>
+                    <div class="item-bottom"><p class="item-price">₺970.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
             </div>
         </div>
 
-        <!-- BURRITOS -->
-        <h2 id="burritos" class="category-title">Burritos</h2>
-        
-        <div class="menu-item">
-            <img src="etli-burrito.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Etli Burrito</h3>
-                    <p class="menu-price">970.40 TL</p>
+        <!-- QUESADILLA -->
+        <div id="quesadilla" class="category-section">
+            <h2 class="section-title">QUESADILLA</h2>
+            <p class="section-desc">30 cm tortilla ekmeği arasında seçeceğiniz; Barbacoa stilinde kaburga eti veya Asado stilinde tavuk veya nohut veya kıyma veya karides eşliğinde, Mozzarella peyniri, Avokado (Guacamole) sos, Iceberg salata, Sour Cream, Salsa Sos, Jalapeno Biber, Meksika Pinto (Fasulye), Kişniş ve Crispy taco kırıntıları...</p>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">Tavuklu</h3>
+                    <p class="item-desc">(Asado)</p>
+                    <div class="item-bottom"><p class="item-price">₺717.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">30 cm tortilla, Kaburga Et, Meksika Pilavı, Sour Cream, Salsa Sos ve Jalapeno</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Nohutlu</h3>
+                    <p class="item-desc">(Garbanzos)</p>
+                    <div class="item-bottom"><p class="item-price">₺717.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Kıymalı</h3>
+                    <p class="item-desc">(Carne)</p>
+                    <div class="item-bottom"><p class="item-price">₺850.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Etli</h3>
+                    <p class="item-desc">(Barbacoa)</p>
+                    <div class="item-bottom"><p class="item-price">₺970.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Karidesli</h3>
+                    <p class="item-desc">(Shrimp)</p>
+                    <div class="item-bottom"><p class="item-price">₺970.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
             </div>
         </div>
 
-        <div class="menu-item">
-            <img src="tavuk-burrito.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Tavuklu Burrito</h3>
-                    <p class="menu-price">717.60 TL</p>
+        <!-- YANINDA İYİ GİDER -->
+        <div id="yaninda" class="category-section">
+            <h2 class="section-title">YANINDA İYİ GİDER</h2>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">Meksika Pilavı</h3>
+                    <p class="item-desc">Jalapeno biber, Havuç, Bezelye, Mısır, Kapya biber ve özel baharatlı pilav.</p>
+                    <div class="item-bottom"><p class="item-price">₺202.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">30 cm tortilla, Tavuk, Meksika Pilavı, Sour Cream, Salsa Sos, Avokado sos ve Cheddar</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Meksikan Pinto (Fasulye)</h3>
+                    <p class="item-desc">Fırınlanmış enfes fasulyeler Meksikan usulü.</p>
+                    <div class="item-bottom"><p class="item-price">₺202.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Corn Cake</h3>
+                    <p class="item-desc">Tatlı mısır, İrmik ve Mısır unu.</p>
+                    <div class="item-bottom"><p class="item-price">₺202.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Özel Baharatlı Patates Kızartması</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺202.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Cheddar Soslu Patates Kızartması</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺247.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
             </div>
         </div>
 
-        <!-- QUESADILLAS & NACHOS -->
-        <h2 id="quesadillas" class="category-title">Quesadillas & Nachos</h2>
-        
-        <div class="menu-item">
-            <img src="quesadilla-tavuk.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Quesadilla Tavuklu</h3>
-                    <p class="menu-price">717.60 TL</p>
+        <!-- FAJITA -->
+        <div id="fajita" class="category-section">
+            <h2 class="section-title">FAJITA</h2>
+            <p class="section-desc">Karamelize soğan ve Renkli biber üzerinde tavuk, Karburga et, Karides veya combo (et-tavuk), Sour cream, Salsa sos, Avokado ( guacamole ) sos, Peynir ve Tortilla ekmeği ile...</p>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">Tavuklu Fajita - 1 Kişilik</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">Tavuk, Mozarella peyniri, Avokado sos, Iceberg salata, Sour Cream, Salsa Sos</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Tavuklu Fajita - 2 Kişilik</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Combo Fajita (Et &Tavuk) - 1 Kişilik</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Combo Fajita (Et &Tavuk) - 2 Kişilik</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Etli Fajita - 1 Kişilik</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Etli Fajita - 2 Kişilik</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Karidesli Fajita - 1 Kişilik</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Karidesli Fajita - 2 Kişilik</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
             </div>
         </div>
 
-        <div class="menu-item">
-            <img src="nachos.jpg" id="nachos" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Etli Nachos</h3>
-                    <p class="menu-price">510.40 TL</p>
+        <!-- TEXAS ENCHILADA -->
+        <div id="texas" class="category-section">
+            <h2 class="section-title">TEXAS ENCHILADA</h2>
+            <p class="section-desc">2 adet 25 cm Soft tortilla ekmeği, Karamelize soğan ve Renkli biber içinde seçeceğiniz; Barbacoa stilinde, Tavuk veya Nohut veya Kıyma veya Karides eşliğinde Chipotle Sos içine sarılmış rol şeklinde Tacolar üzerine Cheddar Sos ve Chipotle Sos ortasına Sour cream ve Salsa Sos yanında Corn Cake, Meksika Pilavı, Meksika Pinto (Fasulye) ve taco turşuları ile...</p>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">Tavuklu</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺765.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">Nacho Chips, Kaburga Et, Jalapeno Biber, Meksika Fasulyesi, Sour Cream, Cheddar</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Nohutlu</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺765.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Kıymalı</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺910.00</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Etli</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺1,002.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Karidesli</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺1,002.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
             </div>
         </div>
 
-        <!-- BURGERLER -->
-        <h2 id="burgerler" class="category-title">Burgerler</h2>
-        
-        <div class="menu-item">
-            <img src="burger-tavuk.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Tavuklu Asado Burger</h3>
-                    <p class="menu-price">480.00 TL</p>
+        <!-- EXTREME CHEESE TACO -->
+        <div id="extreme" class="category-section">
+            <h2 class="section-title">EXTREME CHEESE TACO</h2>
+            <p class="section-desc">İkili Tortilla ekmeği arasında Mozzarella Peyniri 2 adet Soft Taco üzerinde Karamelize soğan, Renkli biber, seçeceğiniz Tavuk, Kaburga et, Karides, Nohut, Kıyma, Salsa sos, Sour cream, avokado ( guacamole ) sos, Iceberg yanında Corn Cake ve Patates Kızartması ile...</p>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">Tavuklu</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺717.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">120g Asado tavuk, Cheddar sos, Barbekü, Salsa, Iceberg, Avokado sos</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Nohutlu</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺717.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Kıymalı</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺852.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Etli</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺937.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Karidesli</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺937.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
             </div>
         </div>
 
-        <!-- TATLILAR & YAN ÜRÜNLER -->
-        <h2 id="tatlilar" class="category-title">Tatlılar & Yan Ürünler</h2>
-        
-        <div class="menu-item">
-            <img src="churros.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Super Churros</h3>
-                    <p class="menu-price">295.20 TL</p>
+        <!-- TACO SUPREME -->
+        <div id="supreme" class="category-section">
+            <h2 class="section-title">TACO SUPREME</h2>
+            <p class="section-desc">2'li soft veya crispy taco, small burrito, mısır, cheddar peynir sosu, Kısır, Patates Kızartması, Meksikan Pinto ( Fasulye ), Corn Cake ile...</p>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">Tavuklu</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺807.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">Seçeceğiniz özel çikolata veya karamel sos ile sıcak servis edilir</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Nohutlu</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺807.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Kıymalı</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺937.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Etli</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺1,027.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
+                <div class="menu-card">
+                    <h3 class="item-name">Karidesli</h3>
+                    <p class="item-desc"></p>
+                    <div class="item-bottom"><p class="item-price">₺1,027.50</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                </div>
             </div>
         </div>
 
-        <div class="menu-item">
-            <img src="patates.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Cheddar Peynirli Patates</h3>
-                    <p class="menu-price">247.60 TL</p>
+        <!-- SPECIALS -->
+        <div id="specials" class="category-section">
+            <h2 class="section-title">SPECIALS</h2>
+            <div class="grid-container">
+                <div class="menu-card">
+                    <h3 class="item-name">Paco</h3>
+                    <p class="item-desc">Tavuk; 25 cm Tortilla ekmeği, Mozzarella peyniri, Renkli biber, Karamelize soğan, Avokado (Guacamole) sos, Cheddar sos, Chipotle sos ve Nachos...</p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">Altın sarısı kızartılmış patates çubukları üzerine erimiş Cheddar peyniri</p>
-            </div>
-        </div>
-
-        <!-- İÇECEKLER -->
-        <h2 id="icecekler" class="category-title">İçecekler</h2>
-        
-        <div class="menu-item">
-            <img src="kola.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Coca-Cola (33 cl)</h3>
-                    <p class="menu-price">117.60 TL</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Anna</h3>
+                    <p class="item-desc">Nohut; 25 cm Tortilla ekmeği, Mozzarella peyniri, Renkli biber, Karamelize soğan, Macha Sos (Acılı), Creamy Cheese Sos Ve Nachos...</p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">Soğuk Kutu İçecek</p>
-            </div>
-        </div>
-
-        <div class="menu-item">
-            <img src="ayran.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Ayran (29.5 cl)</h3>
-                    <p class="menu-price">95.00 TL</p>
+                <div class="menu-card">
+                    <h3 class="item-name">Oscar</h3>
+                    <p class="item-desc">Kıymalı 2'li Soft Taco, Kıymalı Crispy Taco, Karamelize soğan, Renkli biber ve Macha Sos (Acılı), Creamy Cheese Sos ve Patates Kızartması,...</p>
+                    <div class="item-bottom"><p class="item-price">₺...</p><svg class="heart-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
                 </div>
-                <p class="menu-desc">Serinletici geleneksel ayran</p>
-            </div>
-        </div>
-
-        <div class="menu-item">
-            <img src="chilada.jpg" class="menu-img" onerror="this.src='https://placehold.co/150x150/e8f5e9/2e7d32?text=Gorsel+Yok'">
-            <div class="menu-info">
-                <div class="menu-header">
-                    <h3 class="menu-name">Chi Chilada</h3>
-                    <p class="menu-price">177.60 TL</p>
-                </div>
-                <p class="menu-desc">Acılı Kızılcıklı Limonata (İmza İçecek)</p>
             </div>
         </div>
 
     </div>
-
-    <div class="footer">
-        Powered by <span>TapGo</span> NFC Menü Sistemleri
-    </div>
-
 </body>
 </html>
