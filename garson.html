@@ -11,18 +11,13 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        :root {
-            --primary: #d84315; --secondary: #2e7d32; --bg: #f4f5f7; --white: #ffffff;
-            --text-dark: #1a1a1a; --table-empty: #4caf50; --table-full: #f44336;
-        }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+        :root { --primary: #d84315; --secondary: #2e7d32; --bg: #f4f5f7; --white: #ffffff; --text-dark: #1a1a1a; --table-empty: #4caf50; --table-full: #f44336; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; color: var(--text-dark); padding-bottom: 80px;}
         
         #login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: var(--secondary); color: white; }
-        .login-box { background: white; padding: 30px; border-radius: 16px; text-align: center; color: var(--text-dark); width: 85%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); box-sizing: border-box; }
+        .login-box { background: white; padding: 30px; border-radius: 16px; text-align: center; color: var(--text-dark); width: 85%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
-        .login-btn { background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%; box-sizing: border-box; transition: 0.2s; }
-        .login-btn:active { transform: scale(0.98); background: #bf360c; }
-        
+        .login-btn { background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%; }
         #login-error { color: #d32f2f; margin-top: 15px; font-size: 14px; font-weight: 600; display: none; }
 
         header { background: #1b5e20; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -34,11 +29,13 @@
 
         .grid-header { display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center; }
         .table-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 12px; }
-        .table-card { background: var(--white); border-radius: 12px; padding: 15px 5px; text-align: center; cursor: pointer; border-top: 4px solid var(--table-empty); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .table-card { background: var(--white); border-radius: 12px; padding: 15px 5px; text-align: center; cursor: pointer; border-top: 4px solid var(--table-empty); box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative;}
         .table-card h3 { margin: 0 0 5px 0; font-size: 16px; }
         .table-card.dolu { border-top-color: var(--table-full); background-color: #fff5f5; }
         .table-status { font-size: 12px; font-weight: 600; color: var(--table-empty); }
         .table-card.dolu .table-status { color: var(--table-full); }
+        
+        .hazir-bildirim { position: absolute; top: -5px; right: -5px; background: var(--secondary); color: white; width: 20px; height: 20px; border-radius: 50%; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
         .back-btn { background: none; border: none; color: var(--secondary); font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 15px; }
         
@@ -55,12 +52,16 @@
 
         .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); }
         .action-btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; }
-        .action-btn:disabled { background: #999; cursor: not-allowed; }
         .action-btn.pay-btn { background: var(--secondary); }
+        
+        .siparis-satiri { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:8px; }
+        .durum-hazirlaniyor { color: #f57c00; font-size: 12px; font-weight: 600; }
+        .durum-teslim { color: #757575; font-size: 12px; font-weight: 600; }
+        .teslim-et-btn { background: var(--secondary); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-
+    <!-- GİRİŞ EKRANI -->
     <div id="login-screen">
         <div class="login-box">
             <h2>TapGo Garson</h2>
@@ -71,6 +72,7 @@
         </div>
     </div>
 
+    <!-- ANA SİSTEM -->
     <div id="main-system" style="display: none;">
         <header>
             <h1>TapGo POS</h1>
@@ -83,30 +85,27 @@
                     <h2>Masalar</h2>
                     <div><span id="dolu-sayisi">0</span> Masa Dolu</div>
                 </div>
-                <div class="table-grid" id="table-container">
-                    <!-- Masalar Buraya Çizilecek -->
-                </div>
+                <div class="table-grid" id="table-container"></div>
             </div>
 
             <div id="siparis-screen" class="screen">
                 <button class="back-btn" onclick="ekranDegistir('masalar-screen')">← Geri Dön</button>
-                <h2 id="secili-masa-baslik">Masa 1</h2>
+                <h2 id="secili-masa-baslik" style="margin-top:0;">Masa 1</h2>
                 
                 <div id="eski-siparisler" style="background:#fff3e0; padding:15px; border-radius:12px; margin-bottom:15px; display:none;">
-                    <h4 style="margin:0 0 10px; color:#e65100;">Mevcut Adisyon</h4>
+                    <h4 style="margin:0 0 10px; color:#e65100; border-bottom:1px solid #ffe0b2; padding-bottom:5px;">Mevcut Adisyon (Durum)</h4>
                     <div id="eski-siparis-listesi"></div>
                 </div>
 
                 <div class="cart-box" id="yeni-sepet">
-                    <h4 style="margin:0 0 10px; color:var(--secondary);">Yeni Eklenenler (Onay Bekliyor)</h4>
+                    <h4 style="margin:0 0 10px; color:var(--secondary);">Yeni Eklenenler</h4>
                     <div id="yeni-sepet-listesi"></div>
                 </div>
 
                 <div id="menu-alani"></div>
-                <br><br><br><br>
 
                 <div class="bottom-bar">
-                    <div style="font-size:16px; font-weight:600;">Genel Toplam: <br><span style="color:var(--primary); font-size:18px;" id="sepet-toplam">0 TL</span></div>
+                    <div style="font-size:16px; font-weight:600;">Toplam: <br><span style="color:var(--primary); font-size:18px;" id="sepet-toplam">0 TL</span></div>
                     <button class="action-btn" id="mutfak-btn" onclick="mutfagaGonder()">Mutfağa Gönder</button>
                     <button class="action-btn pay-btn" id="hesap-btn" style="display:none;" onclick="hesabiAl()">Hesabı Al</button>
                 </div>
@@ -115,7 +114,6 @@
     </div>
 
     <script>
-        // FIREBASE BAĞLANTISI
         const firebaseConfig = {
             apiKey: "AIzaSyA6NWemh-bc9-pbvLC5kHQAYBjPvZdBQeM",
             authDomain: "superrtaco-e790c.firebaseapp.com",
@@ -123,8 +121,7 @@
             projectId: "superrtaco-e790c",
             storageBucket: "superrtaco-e790c.firebasestorage.app",
             messagingSenderId: "308330390432",
-            appId: "1:308330390432:web:2cefdab4f76ffa668f3ac5",
-            measurementId: "G-GC0WGE5ZE1"
+            appId: "1:308330390432:web:2cefdab4f76ffa668f3ac5"
         };
         
         let db = null;
@@ -132,46 +129,28 @@
         let anlikSepet = [];
         let masalarVerisi = {};
 
-        for(let i=1; i<=25; i++) {
-            masalarVerisi["masa_" + i] = { id: i, durum: 'bos', siparisler: [], toplamHesap: 0 };
-        }
+        for(let i=1; i<=25; i++) { masalarVerisi["masa_" + i] = { id: i, durum: 'bos', siparisler: [], toplamHesap: 0 }; }
         
         window.onload = function() {
             try {
-                if (typeof firebase !== 'undefined') {
-                    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-                    db = firebase.database();
-                }
-            } catch (error) { console.error("Firebase Hatası:", error); }
-
-            const sifreInput = document.getElementById('sifre');
-            if(sifreInput) {
-                sifreInput.addEventListener('keypress', function (e) {
-                    if (e.key === 'Enter') girisYap();
-                });
-            }
+                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+            } catch (error) { console.error(error); }
+            
+            document.getElementById('sifre').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') girisYap();
+            });
         };
 
         const menuUrunleri = [
             { kategori: "BAŞLANGIÇ", urunler: [
-                { ad: "Chips Nachos", fiyat: 625.00 },
-                { ad: "Quicksadilla Macha (Acılı)", fiyat: 485.00 },
-                { ad: "Quicksadilla (Creamy Cheese)", fiyat: 485.00 },
-                { ad: "Nachos Soslu", fiyat: 380.00 },
-                { ad: "Nachos Carne (Kıymalı)", fiyat: 495.00 }
+                { ad: "Chips Nachos", fiyat: 625 }, { ad: "Quicksadilla Macha", fiyat: 485 }, { ad: "Nachos Soslu", fiyat: 380 }
             ]},
             { kategori: "TACO", urunler: [
-                { ad: "3'lü Taco Tavuklu", fiyat: 682.50 },
-                { ad: "3'lü Taco Etli", fiyat: 860.00 },
-                { ad: "3'lü Taco Kıymalı", fiyat: 770.00 },
-                { ad: "5'li Taco Tavuklu", fiyat: 982.50 },
-                { ad: "5'li Taco Etli", fiyat: 1315.50 },
-                { ad: "5'li Taco Karidesli", fiyat: 1315.50 }
+                { ad: "3'lü Taco Tavuklu", fiyat: 682.50 }, { ad: "3'lü Taco Etli", fiyat: 860 }, { ad: "5'li Taco Etli", fiyat: 1315.50 }
             ]},
             { kategori: "İÇECEKLER", urunler: [
-                { ad: "Coca-Cola (33 cl)", fiyat: 147.00 },
-                { ad: "Ayran (29.5 cl)", fiyat: 118.00 },
-                { ad: "Su", fiyat: 60.00 }
+                { ad: "Coca-Cola (33 cl)", fiyat: 147 }, { ad: "Ayran", fiyat: 118 }
             ]}
         ];
 
@@ -182,11 +161,7 @@
                 html += `<div class="menu-category">${kategori.kategori}</div>`;
                 kategori.urunler.forEach(urun => {
                     const guvenliAd = urun.ad.replace(/'/g, "\\'"); 
-                    html += `
-                    <div class="menu-item">
-                        <div class="item-info"><h4>${urun.ad}</h4><p>${urun.fiyat} TL</p></div>
-                        <button class="add-btn" onclick="sepeteEkle('${guvenliAd}', ${urun.fiyat})">+</button>
-                    </div>`;
+                    html += `<div class="menu-item"><div class="item-info"><h4>${urun.ad}</h4><p>${urun.fiyat} TL</p></div><button class="add-btn" onclick="sepeteEkle('${guvenliAd}', ${urun.fiyat})">+</button></div>`;
                 });
             });
             menuAlani.innerHTML = html;
@@ -195,53 +170,26 @@
         function girisYap() {
             const kadi = document.getElementById('kullanici').value.trim(); 
             const sifre = document.getElementById('sifre').value.trim();
-            const hataMesaji = document.getElementById('login-error');
-
             if(kadi === 'siyar' && sifre === 'siyar123') {
-                hataMesaji.style.display = 'none';
+                document.getElementById('login-error').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'none'; 
                 document.getElementById('main-system').style.display = 'block'; 
-                
-                menuyuCiz();
-                ekranaMasalariCiz(masalarVerisi);
-                veritabaniniDinle();
-            } else {
-                hataMesaji.style.display = 'block';
-            }
+                menuyuCiz(); ekranaMasalariCiz(masalarVerisi); veritabaniniDinle();
+            } else { document.getElementById('login-error').style.display = 'block'; }
         }
 
-        function cikisYap() {
-            document.getElementById('main-system').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'flex'; 
-            document.getElementById('kullanici').value = '';
-            document.getElementById('sifre').value = '';
-        }
+        function cikisYap() { location.reload(); }
 
         function veritabaniniDinle() {
             if(!db) return; 
-
             db.ref('masalar').on('value', (snapshot) => {
-                let data = snapshot.val();
-                let guncellemeGerekiyor = false;
-                
-                if (!data) {
-                    data = masalarVerisi; 
-                    guncellemeGerekiyor = true;
-                } else {
-                    for(let i=1; i<=25; i++) {
-                        if(!data["masa_" + i]) {
-                            data["masa_" + i] = { id: i, durum: 'bos', siparisler: [], toplamHesap: 0 };
-                            guncellemeGerekiyor = true;
-                        }
-                    }
+                let data = snapshot.val() || masalarVerisi;
+                for(let i=1; i<=25; i++) {
+                    if(!data["masa_" + i]) data["masa_" + i] = { id: i, durum: 'bos', siparisler: [], toplamHesap: 0 };
                 }
-
                 masalarVerisi = data;
                 ekranaMasalariCiz(data);
-
-                if(guncellemeGerekiyor) {
-                    db.ref('masalar').update(data);
-                }
+                if(aktifMasaId && document.getElementById('siparis-screen').classList.contains('active')) { masaAdisyonunuCiz(); }
             });
         }
 
@@ -249,74 +197,71 @@
             const container = document.getElementById('table-container');
             container.innerHTML = '';
             let doluSayisi = 0;
-
             const siraliMasalar = Object.values(data).sort((a, b) => a.id - b.id);
 
             siraliMasalar.forEach(masa => {
                 if(masa.durum === 'dolu') doluSayisi++;
-                
+                let hazirUrunVar = false;
+                if(masa.siparisler) {
+                    const siparisler = Array.isArray(masa.siparisler) ? masa.siparisler : Object.values(masa.siparisler);
+                    hazirUrunVar = siparisler.some(s => s.durum === 'hazir');
+                }
+                const bildirimHtml = hazirUrunVar ? `<div class="hazir-bildirim">!</div>` : '';
                 const card = document.createElement('div');
                 card.className = `table-card ${masa.durum}`;
                 card.onclick = () => masaSec(masa.id, "masa_" + masa.id);
-                
-                card.innerHTML = `
-                    <h3>Masa ${masa.id}</h3>
-                    <div class="table-status">${masa.durum === 'bos' ? 'Boş' : masa.toplamHesap + ' TL'}</div>
-                `;
+                card.innerHTML = `${bildirimHtml}<h3>Masa ${masa.id}</h3><div class="table-status">${masa.durum === 'bos' ? 'Boş' : masa.toplamHesap + ' TL'}</div>`;
                 container.appendChild(card);
             });
             document.getElementById('dolu-sayisi').innerText = doluSayisi;
         }
 
         function masaSec(id, firebaseKey) {
-            aktifMasaId = firebaseKey;
-            anlikSepet = []; 
-            
-            // Eğer masa verisi herhangi bir sebepten kayıpsa boş bir şablon oluştur (Çökmeyi engeller)
-            const masa = masalarVerisi[firebaseKey] || { durum: 'bos', siparisler: [], toplamHesap: 0 };
-            
+            aktifMasaId = firebaseKey; anlikSepet = []; 
             document.getElementById('secili-masa-baslik').innerText = `Masa ${id}`;
+            masaAdisyonunuCiz(); sepetiGuncelleEkranda(); ekranDegistir('siparis-screen');
+        }
+
+        function masaAdisyonunuCiz() {
+            const masa = masalarVerisi[aktifMasaId] || { durum: 'bos', siparisler: [], toplamHesap: 0 };
             document.getElementById('hesap-btn').style.display = (masa.durum === 'dolu') ? 'block' : 'none';
-            
             const eskiSiparisDiv = document.getElementById('eski-siparisler');
             
-            // Firebase siparişleri array(dizi) yerine object(nesne) döndürürse diye güvenlik kontrolü:
-            let mevcutSiparisler = [];
-            if(masa.siparisler) {
-                mevcutSiparisler = Array.isArray(masa.siparisler) ? masa.siparisler : Object.values(masa.siparisler);
-            }
+            let mevcutSiparisler = masa.siparisler ? (Array.isArray(masa.siparisler) ? masa.siparisler : Object.values(masa.siparisler)) : [];
 
             if(masa.durum === 'dolu' && mevcutSiparisler.length > 0) {
                 eskiSiparisDiv.style.display = 'block';
                 let html = '';
                 mevcutSiparisler.forEach(item => {
-                    html += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${item.adet}x ${item.ad}</span> <b>${item.fiyat * item.adet} TL</b></div>`;
+                    let durumHtml = '';
+                    if(item.durum === 'hazirlaniyor') durumHtml = `<span class="durum-hazirlaniyor">⏳ Mutfakta Hazırlanıyor</span>`;
+                    else if(item.durum === 'hazir') durumHtml = `<button class="teslim-et-btn" onclick="teslimEt('${item.id}')">Masaya Teslim Et ✅</button>`;
+                    else if(item.durum === 'teslim') durumHtml = `<span class="durum-teslim">🍽️ Masaya Teslim Edildi</span>`;
+
+                    html += `<div class="siparis-satiri"><div><span style="font-weight:bold; color:var(--primary);">${item.adet}x</span> ${item.ad} <br><div style="margin-top:5px;">${durumHtml}</div></div><b style="font-size:15px;">${item.fiyat * item.adet} TL</b></div>`;
                 });
                 document.getElementById('eski-siparis-listesi').innerHTML = html;
-            } else {
-                eskiSiparisDiv.style.display = 'none';
-            }
+            } else { eskiSiparisDiv.style.display = 'none'; }
+        }
 
-            sepetiGuncelleEkranda();
-            ekranDegistir('siparis-screen');
+        function teslimEt(siparisId) {
+            const masa = masalarVerisi[aktifMasaId];
+            let guncelSiparisler = Array.isArray(masa.siparisler) ? [...masa.siparisler] : Object.values(masa.siparisler);
+            let siparisIndex = guncelSiparisler.findIndex(s => s.id == siparisId);
+            if(siparisIndex > -1) {
+                guncelSiparisler[siparisIndex].durum = 'teslim';
+                db.ref('masalar/' + aktifMasaId + '/siparisler').set(JSON.parse(JSON.stringify(guncelSiparisler)));
+            }
         }
 
         function sepeteEkle(ad, fiyat) {
             const index = anlikSepet.findIndex(u => u.ad === ad);
-            if(index > -1) {
-                anlikSepet[index].adet++;
-            } else {
-                anlikSepet.push({ ad, fiyat, adet: 1 });
-            }
+            if(index > -1) anlikSepet[index].adet++; else anlikSepet.push({ ad, fiyat, adet: 1 });
             sepetiGuncelleEkranda();
         }
 
         function sepettenCikar(index) {
-            if(anlikSepet[index].adet > 1) {
-                anlikSepet[index].adet--;
-            } else {
-                anlikSepet.splice(index, 1);
-            }
+            if(anlikSepet[index].adet > 1) anlikSepet[index].adet--; else anlikSepet.splice(index, 1);
             sepetiGuncelleEkranda();
         }
 
@@ -330,97 +275,56 @@
                 let html = '';
                 anlikSepet.forEach((urun, i) => {
                     yeniToplam += (urun.fiyat * urun.adet);
-                    html += `
-                    <div class="cart-row">
-                        <div>${urun.ad}</div>
-                        <div class="qty-controls">
-                            <button class="qty-btn" onclick="sepettenCikar(${i})">-</button>
-                            <span>${urun.adet}</span>
-                            <button class="qty-btn" onclick="sepeteEkle('${urun.ad.replace(/'/g, "\\'")}', ${urun.fiyat})">+</button>
-                            <span style="font-weight:bold; margin-left:10px;">${urun.fiyat * urun.adet} TL</span>
-                        </div>
-                    </div>`;
+                    html += `<div class="cart-row"><div>${urun.ad}</div><div class="qty-controls"><button class="qty-btn" onclick="sepettenCikar(${i})">-</button><span>${urun.adet}</span><button class="qty-btn" onclick="sepeteEkle('${urun.ad.replace(/'/g, "\\'")}', ${urun.fiyat})">+</button><span style="font-weight:bold; margin-left:10px;">${urun.fiyat * urun.adet} TL</span></div></div>`;
                 });
                 listDiv.innerHTML = html;
-            } else {
-                sepetDiv.style.display = 'none';
-            }
+            } else { sepetDiv.style.display = 'none'; }
 
             const masa = masalarVerisi[aktifMasaId] || {};
-            const eskiToplam = masa.toplamHesap || 0;
-            document.getElementById('sepet-toplam').innerText = (eskiToplam + yeniToplam) + ' TL';
+            document.getElementById('sepet-toplam').innerText = ((masa.toplamHesap || 0) + yeniToplam) + ' TL';
         }
 
-        // ==========================================
-        // KUSURSUZ (BULLETPROOF) MUTFAĞA GÖNDERME
-        // ==========================================
+        // =======================================================
+        // ZORUNLU GERİ DÖNÜŞLÜ (ÇÖKMEZ) MUTFAĞA GÖNDERME İŞLEMİ
+        // =======================================================
         function mutfagaGonder() {
-            if(anlikSepet.length === 0) {
-                alert("Lütfen önce sepete ürün ekleyin!");
-                return;
-            }
-            
+            if(anlikSepet.length === 0) return;
             const btn = document.getElementById('mutfak-btn');
-            const eskiYazi = btn.innerText;
-            btn.innerText = "Gönderiliyor...";
-            btn.disabled = true;
-
+            btn.innerText = "Gönderiliyor..."; btn.disabled = true;
+            
             const masa = masalarVerisi[aktifMasaId] || { durum: 'bos', siparisler: [], toplamHesap: 0 };
+            let guncelSiparisler = masa.siparisler ? (Array.isArray(masa.siparisler) ? [...masa.siparisler] : Object.values(masa.siparisler)) : [];
             
-            // Firebase'den gelen veriyi her ihtimale karşı temiz bir diziye çeviriyoruz
-            let guncelSiparisler = [];
-            if(masa.siparisler) {
-                guncelSiparisler = Array.isArray(masa.siparisler) ? [...masa.siparisler] : Object.values(masa.siparisler);
-            }
-            
-            // Yeni siparişleri üzerine ekle
-            anlikSepet.forEach(yeniUrun => { guncelSiparisler.push(yeniUrun); });
+            anlikSepet.forEach(yeniUrun => { 
+                guncelSiparisler.push({ ad: yeniUrun.ad, fiyat: yeniUrun.fiyat, adet: yeniUrun.adet, durum: 'hazirlaniyor', id: Date.now() + Math.floor(Math.random() * 1000) }); 
+            });
 
-            const eskiToplam = masa.toplamHesap || 0;
-            const yeniEklenenTutar = anlikSepet.reduce((t, u) => t + (u.fiyat * u.adet), 0);
+            const kayitEdilecekVeri = {
+                durum: 'dolu',
+                siparisler: JSON.parse(JSON.stringify(guncelSiparisler)), // Veriyi Firebase için tertemiz (saf) hale getirir
+                toplamHesap: Number(masa.toplamHesap || 0) + Number(anlikSepet.reduce((t, u) => t + (u.fiyat * u.adet), 0))
+            };
 
-            if(db) {
-                db.ref('masalar/' + aktifMasaId).update({
-                    durum: 'dolu',
-                    siparisler: guncelSiparisler,
-                    toplamHesap: eskiToplam + yeniEklenenTutar
-                }).then(() => {
-                    alert("Siparişler başarıyla mutfağa iletildi!");
-                    btn.innerText = eskiYazi;
-                    btn.disabled = false;
-                    ekranDegistir('masalar-screen');
-                }).catch((error) => {
-                    console.error("Firebase Hatası:", error);
-                    alert("Veritabanı hatası! Lütfen Firebase (Rules) izinlerinizi kontrol edin.");
-                    btn.innerText = eskiYazi;
-                    btn.disabled = false;
-                });
-            } else {
-                alert("İnternet bağlantısı koptu! Sayfayı yenileyin.");
-                btn.innerText = eskiYazi;
-                btn.disabled = false;
-            }
+            // Hata olsa da olmasa da Callback sayesinde butonu çöz ve masalara dön!
+            db.ref('masalar/' + aktifMasaId).update(kayitEdilecekVeri, (error) => {
+                btn.innerText = "Mutfağa Gönder"; btn.disabled = false;
+                if (error) { alert("Bağlantı hatası, tekrar deneyin."); } 
+                else { ekranDegistir('masalar-screen'); } // Başarılıysa anında masalara dön
+            });
         }
 
         function hesabiAl() {
             if(confirm("Masa hesabını alıp kapatmayı onaylıyor musunuz?")) {
-                if(db) {
-                    db.ref('masalar/' + aktifMasaId).update({
-                        durum: 'bos',
-                        siparisler: null, // Firebase'de diziyi temizlemek için null gönderilir
-                        toplamHesap: 0
-                    }).then(() => {
-                        ekranDegistir('masalar-screen');
-                    }).catch((error) => {
-                        alert("Hata oluştu, masa kapatılamadı.");
-                    });
-                }
+                db.ref('masalar/' + aktifMasaId).update({ durum: 'bos', siparisler: null, toplamHesap: 0 }, () => {
+                    ekranDegistir('masalar-screen');
+                });
             }
         }
 
         function ekranDegistir(ekranId) {
             document.querySelectorAll('.container > .screen').forEach(el => el.classList.remove('active'));
             document.getElementById(ekranId).classList.add('active');
+            window.scrollTo(0,0);
         }
     </script>
 </body>
