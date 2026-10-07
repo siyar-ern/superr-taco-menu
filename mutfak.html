@@ -16,7 +16,8 @@
         .login-box { background: white; padding: 40px 30px; border-radius: 16px; width: 80%; max-width: 320px; text-align: center; border: 2px solid #2e7d32; box-shadow: 0 10px 25px rgba(46,125,50,0.1); }
         .login-box h2 { color: #2e7d32; margin-top: 0; margin-bottom: 25px; }
         .login-box input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ccc; border-radius: 10px; font-size: 15px; box-sizing: border-box; }
-        .login-btn { background: #2e7d32; color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .login-btn { background: #2e7d32; color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .login-btn:active { transform: scale(0.96); }
         
         #main-screen { display: none; }
         .container { padding: 20px; max-width: 1200px; margin: 0 auto; }
@@ -30,8 +31,10 @@
         .siparis-satir:last-child { border-bottom: none; }
         .siparis-ad { font-size: 16px; font-weight: 600; color: #2c3e50; }
         
+        /* ADET ARTIRIP AZALTMA (+ / -) */
         .miktar-kontrol { display: flex; align-items: center; gap: 8px; background: #f5f5f5; padding: 4px; border-radius: 8px; }
-        .btn-miktar { background: white; border: 1px solid #ddd; width: 32px; height: 32px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .btn-miktar { background: white; border: 1px solid #ddd; width: 32px; height: 32px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: 0.1s; }
+        .btn-miktar:active { background: #e0e0e0; transform: scale(0.9); }
 
         .btn-hazir { background: #4caf50; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(76,175,80,0.3); }
         .btn-hazir:active { transform: scale(0.95); }
@@ -73,7 +76,9 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        let maxMasa = 25; // Varsayılan
+        
+        // Masa sayısı artık admin panelinden gelecek
+        let maxMasa = 25; 
 
         // GİRİŞ: ADMİN PANELİNDEN GELEN ŞİFRELERİ KONTROL ET
         function girisYap() {
@@ -85,6 +90,7 @@
                 if(snap.exists()) {
                     let users = snap.val();
                     for(let key in users) {
+                        // Rolü mutfak olanları içeri al
                         if(users[key].kadi === k && users[key].sifre === s && users[key].rol === 'mutfak') {
                             girisBasarili = true; break;
                         }
@@ -96,7 +102,7 @@
                     document.getElementById('main-screen').style.display = 'block';
                     mutfagiBaslat();
                 } else {
-                    alert("Kullanıcı adı, şifre hatalı veya Mutfak yetkiniz yok!");
+                    alert("Hatalı giriş! Şifrenizi kontrol edin veya Mutfak yetkiniz olduğundan emin olun.");
                 }
             });
         }
@@ -108,7 +114,7 @@
                 document.getElementById('baglanti-durumu').innerHTML = snap.val() === true ? "🟢 Sistem Aktif" : "🔴 Bağlantı Yok";
             });
 
-            // Admin panelinden Masa Sayısını Çek (Mutfak da bilsin)
+            // Admin panelinden Masa Sayısını Çek (Mutfak ekranı bilsin)
             db.ref('ayarlar/masaSayisi').on('value', snap => {
                 if(snap.exists()) maxMasa = snap.val();
             });
@@ -125,13 +131,17 @@
             let mutfakBos = true;
 
             if(masalar) {
+                // Sadece adminden gelen maxMasa sayısına kadar döngü yap
                 for(let i=1; i<=maxMasa; i++) {
                     let masaKey = "masa_" + i;
                     let masa = masalar[masaKey];
+                    
                     if(masa && masa.siparisler) {
                         let html = '';
                         for(let key in masa.siparisler) {
                             let s = masa.siparisler[key];
+                            
+                            // Sadece durumu 'bekliyor' olanları (yani yeni gelenleri) çiz
                             if(s.durum === 'bekliyor') {
                                 mutfakBos = false;
                                 html += `
@@ -148,6 +158,8 @@
                                 </div>`;
                             }
                         }
+                        
+                        // Eğer o masaya ait çizilecek sipariş varsa, Fiş (Kart) içine koy
                         if(html !== '') {
                             alan.innerHTML += `
                             <div class="fis">
@@ -165,6 +177,7 @@
             }
         }
 
+        // MUTFAK ADET DEĞİŞTİRDİĞİNDE GARSOnUN HESABINI GÜNCELLEYEN ZEKİ SİSTEM
         function miktarDegistir(masaKey, siparisKey, artis) {
             let masaRef = db.ref('masalar/' + masaKey);
             masaRef.once('value').then(snap => {
@@ -172,24 +185,34 @@
                 if(m && m.siparisler && m.siparisler[siparisKey]) {
                     let s = m.siparisler[siparisKey];
                     let yeniAdet = s.adet + artis;
-                    if (yeniAdet <= 0) { if(!confirm("Siparişi silmek istiyor musunuz?")) return; }
                     
+                    // Eğer adet sıfıra düşerse siparişi tamamen iptal etme onayı
+                    if (yeniAdet <= 0) { 
+                        if(!confirm("Siparişi mutfaktan tamamen silmek istiyor musunuz?")) return; 
+                    }
+                    
+                    // Masanın toplam hesabını yeni adete göre güncelle
                     let fiyatFarki = artis * s.fiyat;
                     let yeniToplam = (m.toplamHesap || 0) + fiyatFarki;
                     
                     let updates = { 'toplamHesap': yeniToplam };
                     
+                    // Adet 0 olduysa ürünü veritabanından sil, olmadıysa yeni adeti yaz
                     if (yeniAdet <= 0) {
+                        // Masadaki tek sipariş bu ise masayı boşa çıkar
                         if(Object.keys(m.siparisler).length === 1) updates['durum'] = 'bos';
                         updates['siparisler/' + siparisKey] = null;
                     } else {
                         updates['siparisler/' + siparisKey + '/adet'] = yeniAdet;
                     }
+                    
+                    // Güncellemeyi buluta gönder
                     masaRef.update(updates);
                 }
             });
         }
 
+        // Aşçı Hazır'a bastığında siparişi teslim bekliyor statüsüne geçir
         function hazirYaptim(masaKey, siparisKey) {
             db.ref('masalar/' + masaKey + '/siparisler/' + siparisKey).update({ durum: 'hazir' });
         }
