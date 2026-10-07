@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Süperr Taco - Admin Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        :root {
+            --bg: #f1f5f9;
+            --sidebar: #0f172a;
+            --sidebar-hover: #1e293b;
+            --primary: #3b82f6;
+            --danger: #ef4444;
+            --success: #10b981;
+            --text-dark: #1e293b;
+            --white: #ffffff;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
+
+        /* GİRİŞ EKRANI */
+        #login-screen { position: absolute; top:0; left:0; width: 100%; height: 100%; background: #0f172a; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+        .login-box { background: white; padding: 40px; border-radius: 16px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .login-box h2 { color: #0f172a; margin-top: 0; }
+        .login-box input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
+        .login-btn { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
+
+        /* YAN MENÜ (SIDEBAR) */
+        #sidebar { width: 250px; background: var(--sidebar); color: white; display: flex; flex-direction: column; transition: 0.3s; }
+        .logo-alan { padding: 20px; font-size: 20px; font-weight: bold; border-bottom: 1px solid #334155; text-align: center; color: #60a5fa; }
+        .menu-btn { padding: 15px 20px; color: #cbd5e1; cursor: pointer; font-weight: 500; border-bottom: 1px solid #1e293b; transition: 0.2s; }
+        .menu-btn:hover, .menu-btn.active { background: var(--sidebar-hover); color: white; border-left: 4px solid var(--primary); }
+        .cikis-btn { margin-top: auto; padding: 15px; background: #b91c1c; text-align: center; cursor: pointer; font-weight: bold; }
+
+        /* İÇERİK ALANI */
+        #content { flex: 1; padding: 30px; overflow-y: auto; }
+        .panel-screen { display: none; }
+        .panel-screen.active { display: block; }
+        
+        h2 { margin-top: 0; font-size: 24px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+
+        /* KARTLAR VE FORMLAR */
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .form-grup { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .form-grup input, .form-grup select { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; flex: 1; min-width: 150px; font-family: 'Inter'; }
+        .btn { padding: 10px 15px; border: none; border-radius: 6px; font-weight: bold; color: white; cursor: pointer; }
+        .btn-add { background: var(--success); }
+        .btn-del { background: var(--danger); padding: 6px 10px; font-size: 12px; }
+
+        /* LİSTELER */
+        .liste-satir { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f1f5f9; }
+        .liste-satir:last-child { border-bottom: none; }
+        .badge { background: #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+
+        /* MOBİL UYUM */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            #sidebar { width: 100%; flex-direction: row; overflow-x: auto; }
+            .logo-alan { display: none; }
+            .menu-btn { padding: 15px; white-space: nowrap; border-bottom: none; border-left: none; }
+            .menu-btn.active { border-bottom: 4px solid var(--primary); }
+            .cikis-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- GİRİŞ EKRANI -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>Yönetici Girişi</h2>
+            <input type="text" id="adminKullanici" placeholder="Kullanıcı Adı (patron)">
+            <input type="password" id="adminSifre" placeholder="Şifre (patron123)">
+            <button class="login-btn" onclick="adminGiris()">Sistemi Aç</button>
+        </div>
+    </div>
+
+    <!-- YAN MENÜ -->
+    <div id="sidebar">
+        <div class="logo-alan">TapGo Admin</div>
+        <div class="menu-btn active" onclick="sekmeyeGec('tab-masalar', this)">🪑 Masa Ayarları</div>
+        <div class="menu-btn" onclick="sekmeyeGec('tab-menu', this)">🍔 Menü Yönetimi</div>
+        <div class="menu-btn" onclick="sekmeyeGec('tab-kullanici', this)">👤 Kullanıcılar</div>
+        <div class="cikis-btn" onclick="location.reload()">Güvenli Çıkış</div>
+    </div>
+
+    <!-- İÇERİK ALANI -->
+    <div id="content">
+        
+        <!-- MASA YÖNETİMİ -->
+        <div id="tab-masalar" class="panel-screen active">
+            <h2>Masa Ayarları</h2>
+            <div class="card">
+                <p>Garson panelinde görünecek toplam açık masa sayısını belirleyin.</p>
+                <div class="form-grup">
+                    <input type="number" id="masa-sayisi-input" placeholder="Örn: 30" min="1" max="100">
+                    <button class="btn btn-add" onclick="masaSayisiniGuncelle()">Kaydet ve Uygula</button>
+                </div>
+                <small style="color: #64748b;">Not: Masa sayısını düşürürseniz ve o masalarda oturan müşteri varsa sistemdeki siparişleri kaybolmaz ama garsonlar göremez. Değişikliği dükkan boşken yapın.</small>
+            </div>
+        </div>
+
+        <!-- MENÜ YÖNETİMİ -->
+        <div id="tab-menu" class="panel-screen">
+            <h2>Menü ve Fiyat Yönetimi</h2>
+            <div class="card">
+                <h3 style="margin-top:0;">Yeni Ürün Ekle</h3>
+                <div class="form-grup">
+                    <select id="yeni-urun-kategori">
+                        <option value="BAŞLANGIÇ">BAŞLANGIÇ</option>
+                        <option value="TACO">TACO</option>
+                        <option value="İÇECEKLER">İÇECEKLER</option>
+                        <option value="TATLILAR">TATLILAR (Yeni Kategori)</option>
+                    </select>
+                    <input type="text" id="yeni-urun-ad" placeholder="Ürün Adı">
+                    <input type="number" id="yeni-urun-fiyat" placeholder="Fiyat (TL)">
+                    <button class="btn btn-add" onclick="menuyeUrunEkle()">+ Menüye Ekle</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-top:0;">Mevcut Menü Listesi</h3>
+                <div id="menu-listesi">Yükleniyor...</div>
+            </div>
+        </div>
+
+        <!-- KULLANICI YÖNETİMİ -->
+        <div id="tab-kullanici" class="panel-screen">
+            <h2>Personel Giriş Şifreleri</h2>
+            <div class="card">
+                <h3 style="margin-top:0;">Yeni Personel Ekle</h3>
+                <div class="form-grup">
+                    <select id="yeni-per-rol">
+                        <option value="garson">Garson Yetkisi</option>
+                        <option value="mutfak">Mutfak Yetkisi</option>
+                    </select>
+                    <input type="text" id="yeni-per-kadi" placeholder="Kullanıcı Adı (Örn: ahmet)">
+                    <input type="text" id="yeni-per-sifre" placeholder="Şifre">
+                    <button class="btn btn-add" onclick="kullaniciEkle()">Kullanıcı Oluştur</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-top:0;">Aktif Personeller</h3>
+                <div id="kullanici-listesi">Yükleniyor...</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6NWemh-bc9-pbvLC5kHQAYBjPvZdBQeM",
+            authDomain: "superrtaco-e790c.firebaseapp.com",
+            databaseURL: "https://superrtaco-e790c-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "superrtaco-e790c",
+            storageBucket: "superrtaco-e790c.firebasestorage.app",
+            messagingSenderId: "308330390432",
+            appId: "1:308330390432:web:2cefdab4f76ffa668f3ac5"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // ADMİN GİRİŞİ (Güvenlik için Patron Özel Şifresi)
+        function adminGiris() {
+            const k = document.getElementById('adminKullanici').value.trim().toLowerCase();
+            const s = document.getElementById('adminSifre').value.trim();
+            if(k === 'patron' && s === 'patron123') {
+                document.getElementById('login-screen').style.display = 'none';
+                baslangicVerileriniKur();
+                verileriDinle();
+            } else {
+                alert("Hatalı Admin Girişi!");
+            }
+        }
+
+        // SEKMELER ARASI GEÇİŞ
+        function sekmeyeGec(hedefId, element) {
+            document.querySelectorAll('.panel-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(hedefId).classList.add('active');
+            
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // ===============================================
+        // 1. İLK KURULUM (Eğer veritabanı boşsa şablon yükle)
+        // ===============================================
+        function baslangicVerileriniKur() {
+            db.ref('ayarlar/masaSayisi').once('value', snap => {
+                if(!snap.exists()) db.ref('ayarlar').set({ masaSayisi: 25 });
+            });
+
+            db.ref('kullanicilar').once('value', snap => {
+                if(!snap.exists()) {
+                    db.ref('kullanicilar').set({
+                        garson_siyar: { kadi: "siyar", sifre: "siyar123", rol: "garson" },
+                        mutfak_1: { kadi: "mutfak", sifre: "mutfak123", rol: "mutfak" }
+                    });
+                }
+            });
+
+            db.ref('menuUrunleri').once('value', snap => {
+                if(!snap.exists()) {
+                    db.ref('menuUrunleri/BAŞLANGIÇ').push({ ad: "Chips Nachos", fiyat: 625 });
+                    db.ref('menuUrunleri/BAŞLANGIÇ').push({ ad: "Quicksadilla Macha (Acılı)", fiyat: 485 });
+                    db.ref('menuUrunleri/TACO').push({ ad: "3'lü Taco Tavuklu", fiyat: 682.5 });
+                    db.ref('menuUrunleri/İÇECEKLER').push({ ad: "Coca-Cola (33 cl)", fiyat: 147 });
+                }
+            });
+        }
+
+        // ===============================================
+        // 2. VERİLERİ DİNLE VE EKRANA ÇİZ
+        // ===============================================
+        function verileriDinle() {
+            // Masalar
+            db.ref('ayarlar/masaSayisi').on('value', snap => {
+                if(snap.exists()) document.getElementById('masa-sayisi-input').value = snap.val();
+            });
+
+            // Kullanıcılar
+            db.ref('kullanicilar').on('value', snap => {
+                const liste = document.getElementById('kullanici-listesi');
+                liste.innerHTML = '';
+                if(snap.exists()) {
+                    const data = snap.val();
+                    for(let key in data) {
+                        let k = data[key];
+                        let renk = k.rol === 'garson' ? '#3b82f6' : '#10b981';
+                        liste.innerHTML += `
+                        <div class="liste-satir">
+                            <div>
+                                <span class="badge" style="background:${renk}; color:white; margin-right:10px;">${k.rol.toUpperCase()}</span> 
+                                <b>${k.kadi}</b> (Şifre: ${k.sifre})
+                            </div>
+                            <button class="btn btn-del" onclick="kullaniciSil('${key}')">Sil</button>
+                        </div>`;
+                    }
+                }
+            });
+
+            // Menü
+            db.ref('menuUrunleri').on('value', snap => {
+                const liste = document.getElementById('menu-listesi');
+                liste.innerHTML = '';
+                if(snap.exists()) {
+                    const data = snap.val();
+                    for(let kategori in data) {
+                        liste.innerHTML += `<div style="background:#e2e8f0; padding:8px 12px; margin-top:15px; font-weight:bold; border-radius:6px;">${kategori}</div>`;
+                        let urunler = data[kategori];
+                        for(let key in urunler) {
+                            let u = urunler[key];
+                            liste.innerHTML += `
+                            <div class="liste-satir">
+                                <div style="flex:1;"><b>${u.ad}</b></div>
+                                <div style="width:100px; font-weight:bold; color:#3b82f6;">${u.fiyat} TL</div>
+                                <button class="btn btn-del" onclick="urunSil('${kategori}', '${key}')">Kaldır</button>
+                            </div>`;
+                        }
+                    }
+                }
+            });
+        }
+
+        // ===============================================
+        // 3. YÖNETİCİ İŞLEMLERİ (YAZMA/SİLME)
+        // ===============================================
+        function masaSayisiniGuncelle() {
+            let sayi = document.getElementById('masa-sayisi-input').value;
+            if(sayi > 0) {
+                db.ref('ayarlar/masaSayisi').set(Number(sayi));
+                alert("Masa sayısı başarıyla güncellendi!");
+            }
+        }
+
+        function kullaniciEkle() {
+            let rol = document.getElementById('yeni-per-rol').value;
+            let kadi = document.getElementById('yeni-per-kadi').value.trim().toLowerCase();
+            let sifre = document.getElementById('yeni-per-sifre').value.trim();
+
+            if(kadi === '' || sifre === '') return alert("Kullanıcı adı ve şifre boş bırakılamaz!");
+            
+            db.ref('kullanicilar').push({ kadi: kadi, sifre: sifre, rol: rol });
+            document.getElementById('yeni-per-kadi').value = '';
+            document.getElementById('yeni-per-sifre').value = '';
+        }
+
+        function kullaniciSil(key) {
+            if(confirm("Bu personelin giriş yetkisini iptal etmek istiyor musunuz?")) {
+                db.ref('kullanicilar/' + key).remove();
+            }
+        }
+
+        function menuyeUrunEkle() {
+            let kategori = document.getElementById('yeni-urun-kategori').value;
+            let ad = document.getElementById('yeni-urun-ad').value.trim();
+            let fiyat = document.getElementById('yeni-urun-fiyat').value;
+
+            if(ad === '' || fiyat === '') return alert("Ürün adı ve fiyatı eksik!");
+
+            db.ref('menuUrunleri/' + kategori).push({ ad: ad, fiyat: Number(fiyat) });
+            
+            document.getElementById('yeni-urun-ad').value = '';
+            document.getElementById('yeni-urun-fiyat').value = '';
+            alert(`${ad} menüye eklendi!`);
+        }
+
+        function urunSil(kategori, key) {
+            if(confirm("Bu ürünü menüden tamamen kaldırmak istiyor musunuz?")) {
+                db.ref('menuUrunleri/' + kategori + '/' + key).remove();
+            }
+        }
+    </script>
+</body>
+</html>
