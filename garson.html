@@ -40,12 +40,13 @@
         .btn-gonder { background: #d84315; color: white; border: none; padding: 12px 20px; border-radius: 20px; font-weight: bold; font-size: 15px; cursor: pointer; }
         .btn-hesap { background: #2e7d32; color: white; border: none; padding: 12px 20px; border-radius: 20px; font-weight: bold; font-size: 15px; cursor: pointer; display: none; }
         
-        .btn-teslim { background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; margin-top: 8px; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .btn-teslim { background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; margin-top: 8px; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.2s; }
+        .btn-teslim:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="active">
+    <div id="login-screen">
         <div class="login-box">
             <h2 style="color:#2e7d32; margin-top:0;">Garson Girişi</h2>
             <input type="text" id="kullanici" placeholder="Kullanıcı Adı">
@@ -61,8 +62,8 @@
         </header>
 
         <div id="masalar-screen" class="screen active">
-            <h3 style="margin-top:0;">Açık Masalar</h3>
-            <div class="grid" id="masalar-grid"></div>
+            <h3 style="margin-top:0; padding-left:15px;">Açık Masalar</h3>
+            <div class="grid" id="masalar-grid" style="padding:0 15px;"></div>
         </div>
 
         <div id="siparis-screen" class="screen">
@@ -100,7 +101,10 @@
             messagingSenderId: "308330390432",
             appId: "1:308330390432:web:2cefdab4f76ffa668f3ac5"
         };
-        firebase.initializeApp(firebaseConfig);
+        
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.database();
 
         let aktifMasaKey = null;
@@ -114,13 +118,28 @@
             {ad: "Coca-Cola", fiyat: 147}, {ad: "Ayran", fiyat: 118}
         ];
 
+        window.onload = function() {
+            const sifreInput = document.getElementById('sifre');
+            if(sifreInput) {
+                sifreInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') girisYap();
+                });
+            }
+        };
+
         function girisYap() {
-            if(document.getElementById('kullanici').value.trim() === 'siyar' && document.getElementById('sifre').value.trim() === 'siyar123') {
-                document.getElementById('login-screen').classList.remove('active');
-                document.getElementById('main-screen').classList.add('active');
+            const kadi = document.getElementById('kullanici').value.trim().toLowerCase();
+            const sifre = document.getElementById('sifre').value.trim();
+
+            if(kadi === 'siyar' && sifre === 'siyar123') {
+                // EKRANI KÖKTEN GİZLEYEN KOD (Eski hatayı bu çözer)
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-screen').style.display = 'block';
                 menuyuOlustur();
                 veritabaniniDinle();
-            } else { alert("Hatalı Giriş!"); }
+            } else { 
+                alert("Hatalı Giriş!"); 
+            }
         }
 
         db.ref('.info/connected').on('value', function(snap) {
